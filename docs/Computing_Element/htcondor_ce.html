@@ -301,19 +301,23 @@ service runs as either the <code>tomcat</code> user or the account specified by 
 <code>user</code> option in <code>/etc/osg/config.d/30-gip.ini</code>, thus your service
 certificates need to be owned by the appropriate user.</p>
 <ol>
-<li>\&lt;p>Enable osg-info-services in
-<code>/etc/osg/config.d/30-infoservices.ini</code>:\&lt;/p>\ \&lt;pre
-class=&quot;file&quot;>enabled = <em>True</em>\&lt;/pre></li>
-<li>\&lt;p>Generate a <code>user-vo-map</code> file with your authorization set
-up:\&lt;/p>
-i.  \&lt;p>If you're using edg-mkgridmap, run the following:\&lt;/p>\
-\&lt;pre class=&quot;rootscreen&quot;>&lt;span
-class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span>
-edg-mkgridmap\&lt;/pre>
-ii. \&lt;p>If you're using GUMS, run the following:\&lt;/p>\ \&lt;pre
-class=&quot;rootscreen&quot;>&lt;span
-class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span>
-gums-host-cron\&lt;/pre></li>
+<li>
+<p>Enable osg-info-services in
+<code>/etc/osg/config.d/30-infoservices.ini</code>:</p>
+<pre><code>enabled = *True*</code></pre>
+</li>
+<li>
+<p>Generate a <code>user-vo-map</code> file with your authorization set
+up:
+i.  If you're using edg-mkgridmap, run the following:</p>
+<pre><code>```
+edg-mkgridmap
+```</code></pre>
+<p>ii. If you're using GUMS, run the following:</p>
+<pre><code>```
+gums-host-cron
+```</code></pre>
+</li>
 </ol>
 <h3 id="applying-configuration-settings">Applying configuration settings</h3>
 <p>Making changes to the OSG configuration files in the <code>/etc/osg/config.d</code>
@@ -325,19 +329,24 @@ validate (to a limited extent) and apply the settings to the relevant
 software components. The <code>osg-configure</code> software is included
 automatically in an HTCondor CE installation.</p>
 <ol>
-<li>\&lt;p>Make all changes to <code>.ini</code> files in the <code>/etc/osg/config.d</code>
-directory\&lt;/p>\ \&lt;p><strong>Note:</strong> This document describes the
+<li>
+<p>Make all changes to <code>.ini</code> files in the <code>/etc/osg/config.d</code>
+directory</p>
+<p><strong>Note:</strong> This document describes the
 critical settings for HTCondor CE and related software. You may need
 to configure other software that is installed on your HTCondor CE
-host, too.\&lt;/p></li>
-<li>\&lt;p>Validate the configuration settings\&lt;/p>\ \&lt;pre
-class=&quot;rootscreen&quot;>&lt;span
-class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span>
-osg-configure -v\&lt;/pre>\ \&lt;p>Fix any errors (at least) that
-<code>osg-configure</code> reports.\&lt;/p></li>
-<li>\&lt;p>Once the validation command succeeds without errors, apply the
-configuration settings:\&lt;/p>\ \&lt;pre class=&quot;rootscreen&quot;>&lt;span
-class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span> osg-configure -c\&lt;/pre></li>
+host, too.</p>
+</li>
+<li>
+<p>Validate the configuration settings</p>
+<pre><code>osg-configure -v</code></pre>
+<p>Fix any errors (at least) that <code>osg-configure</code> reports.</p>
+</li>
+<li>
+<p>Once the validation command succeeds without errors, apply the
+configuration settings:</p>
+<pre><code>osg-configure -c</code></pre>
+</li>
 </ol>
 <h3 id="optional-configuration">Optional configuration</h3>
 <p>The following configuration steps are optional and will likely not be
@@ -351,14 +360,12 @@ HTCondor CE</a>.</p>
 <li><a href="#AccountingGroups">HTCondor accounting groups</a></li>
 <li><a href="#CeView">Installing the HTCondor-CE View</a></li>
 </ul>
-<h2 id="jobroutes">JobRoutes</h2>
 <h4 id="transforming-and-filtering-jobs">Transforming and filtering jobs</h4>
 <p>If you need to modify or filter jobs, more information can be found in
 the <a href="Documentation/Release3.JobRouterRecipes">Job Router Recipes</a>
 document.</p>
 <p><span class="twiki-macro NOTE"></span> If you need to assign jobs to
 HTCondor accounting groups, refer to <a href="#AccountingGroups">this</a> section.</p>
-<p>#NetworkInterfaces</p>
 <h4 id="configuring-for-multiple-network-interfaces">Configuring for multiple network interfaces</h4>
 <p>If you have multiple network interfaces with different hostnames, the
 HTCondor CE daemons need to know which hostname to use when
@@ -418,25 +425,20 @@ DN, or their VOMS attributes.</p>
 <p>To map UID’s to an accounting group, use <code>/etc/osg/uid_table.txt</code>. It is
 consulted first and contains lines of the form:</p>
 <pre><code>uid GroupName</code></pre>
-<p>&lt;span
-class=&quot;twiki-macro TWISTY&quot;&gt;%TWISTY_OPTS_OUTPUT% showlink=&quot;Click to expand example uid_table.txt…&quot;</span></p>
+<p>Example <code>uid_table.txt</code>:</p>
 <pre><code>uscms02 TestGroup
 osg     other.osgedu</code></pre>
-<p><span class="twiki-macro ENDTWISTY"></span></p>
 <h5 id="mapping-by-dn-or-voms-attribute">Mapping by DN or VOMS attribute</h5>
 <p>To map DN’s or VOMS attributes to an accounting group, use
 <code>/etc/osg/extattr_table.txt</code>. This file is only consulted if the user is
 not found in the UID file and it contains lines of the form:</p>
-<pre><code>&lt;span style="background-color: #FFCCFF;"&gt;SubjectOrAttribute&lt;/span&gt; GroupName</code></pre>
-<p>The \&lt;span style=&quot;background-color:
-#FFCCFF;&quot;>SubjectOrAttribute\&lt;/span> can be a Perl regular
-expression. &lt;span
-class=&quot;twiki-macro TWISTY&quot;&gt;%TWISTY_OPTS_OUTPUT% showlink=&quot;Click to expand example extattr_table.txt…&quot;</span></p>
+<pre><code>SubjectOrAttribute GroupName</code></pre>
+<p>The SubjectOrAttribute can be a Perl regular
+expression.</p>
+<p>Example <code>extattr_table.txt</code>:</p>
 <pre><code>cmsprio cms.other.prio
 cms\/Role=production cms.prod
 .* other</code></pre>
-<p><span class="twiki-macro ENDTWISTY"></span></p>
-<p>#CeView</p>
 <h4 id="install-and-run-the-htcondor-ce-view">Install and run the HTCondor-CE-View</h4>
 <p>The HTCondor-CE-View is an optional web interface to the status of your
 CE. To run the View,</p>
@@ -469,25 +471,70 @@ job gateway</li>
 <p>In addition to the HTCondor CE job gateway service itself, there are a
 number of supporting services in your installation. The specific
 services are:</p>
-<p><span class="twiki-macro TABLE" sort="off"></span></p>
-<hr />
-<p>Software            Service name                                        Notes</p>
-<hr />
-<p>Fetch CRL           On EL 6: <code>fetch-crl-boot</code> and <code>fetch-crl-cron</code>\     See <a href="InstallCertAuth#Start_Stop_fetch_crl_A_quick_gui">CA documentation</a> for more info
-On EL 5: <code>fetch-crl3-boot</code> and <code>fetch-crl3-cron</code></p>
-<p>Gratia              <code>gratia-probes-cron</code>                                Accounting software</p>
-<p>Your batch system   <code>condor</code> or <code>pbs_server</code> or …</p>
-<p>OSG Info Services   <code>osg-info-services</code></p>
-<h2 id="htcondor-ce">HTCondor-CE         <code>condor-ce</code></h2>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Service name</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fetch CRL</td>
+<td>On EL 6: <code>fetch-crl-boot</code> and <code>fetch-crl-cron</code>  <br>   On EL 5: <code>fetch-crl3-boot</code> and <code>fetch-crl3-cron</code></td>
+<td>See <a href="InstallCertAuth#Start_Stop_fetch_crl_A_quick_gui">CA documentation</a> for more info</td>
+</tr>
+<tr>
+<td>Gratia</td>
+<td><code>gratia-probes-cron</code></td>
+<td>Accounting software</td>
+</tr>
+<tr>
+<td>Your batch system</td>
+<td><code>condor</code> or <code>pbs_server</code> or …</td>
+<td></td>
+</tr>
+<tr>
+<td>OSG Info Services</td>
+<td><code>osg-info-services</code></td>
+<td></td>
+</tr>
+<tr>
+<td>HTCondor-CE</td>
+<td><code>condor-ce</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <p>Start the services in the order listed and stop them in reverse order.
 As a reminder, here are common service commands (all run as <code>root</code>):</p>
-<p><span class="twiki-macro TABLE" sort="off"></span></p>
-<p>To …                                          Run the command …</p>
-<hr />
-<p>Start a service                               <code>service &lt;em&gt;SERVICE-NAME&lt;/em&gt; start</code>
-Stop a service                                <code>service &lt;em&gt;SERVICE-NAME&lt;/em&gt; stop</code>
-Enable a service to start during boot         <code>chkconfig &lt;em&gt;SERVICE-NAME&lt;/em&gt; on</code>
-Disable a service from starting during boot   <code>chkconfig &lt;em&gt;SERVICE-NAME&lt;/em&gt; off</code></p>
+<table>
+<thead>
+<tr>
+<th>To …</th>
+<th>Run the command …</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start a service</td>
+<td><code>service &lt;em&gt;SERVICE-NAME&lt;/em&gt; start</code></td>
+</tr>
+<tr>
+<td>Stop a service</td>
+<td><code>service &lt;em&gt;SERVICE-NAME&lt;/em&gt; stop</code></td>
+</tr>
+<tr>
+<td>Enable a service to start during boot</td>
+<td><code>chkconfig &lt;em&gt;SERVICE-NAME&lt;/em&gt; on</code></td>
+</tr>
+<tr>
+<td>Disable a service from starting during boot</td>
+<td><code>chkconfig &lt;em&gt;SERVICE-NAME&lt;/em&gt; off</code></td>
+</tr>
+</tbody>
+</table>
 <h3 id="using-htcondor-ce-tools">Using HTCondor-CE tools</h3>
 <p>Some of the HTCondor CE administrative and user tools are documented in
 <a href="TroubleshootingHTCondorCE">the HTCondor CE troubleshooting guide</a>.</p>
@@ -522,7 +569,6 @@ OIM</a></li>
 <h2 id="getting-help">Getting Help</h2>
 <p>To get assistance, please use the <a href="Documentation.HelpProcedure">this
 page</a>.</p>
-<p>#ReferenceSection</p>
 <h2 id="reference">Reference</h2>
 <p>Here are some other HTCondor-CE documents that might be helpful:</p>
 <ul>
@@ -536,27 +582,70 @@ page</a>.</p>
 directories are parsed in the order presented and thus configuration
 within the final directory will override configuration specified in the
 previous directories.</p>
-<p>Location                           Comment</p>
-<hr />
-<p><code>/usr/share/condor-ce/config.d/</code>   Configuration defaults (overwritten on package updates)
-<code>/etc/condor-ce/config.d/</code>         Files in this directory are parsed in alphanumeric order (i.e., <code>99-local.conf</code> will override values in <code>01-ce-auth.conf</code>)</p>
+<table>
+<thead>
+<tr>
+<th>Location</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/usr/share/condor-ce/config.d/</code></td>
+<td>Configuration defaults (overwritten on package updates)</td>
+</tr>
+<tr>
+<td><code>/etc/condor-ce/config.d/</code></td>
+<td>Files in this directory are parsed in alphanumeric order (i.e., <code>99-local.conf</code> will override values in <code>01-ce-auth.conf</code>)</td>
+</tr>
+</tbody>
+</table>
 <p>For a detailed order of the way configuration files are parsed, run the
 following command:</p>
-<pre><code>%UCL_PROMPT% condor_ce_config_val -config</code></pre>
+<pre><code># condor_ce_config_val -config</code></pre>
 <h3 id="users">Users</h3>
-<p><span class="twiki-macro STARTSECTION">Users</span> The following users
-are needed by HTCondor-CE at all sites:</p>
-<p>| <strong>User</strong> | <strong>Comment</strong> | | <code>condor</code> | The HTCondor-CE will be run as
-root, but perform most of its operations as the <code>condor</code> user. | |
-<code>gratia</code> | Runs the Gratia probes to collect accounting data | |
-<code>tomcat</code> | Default user that runs GIP | &lt;span
-class=&quot;twiki-macro ENDSECTION&quot;&gt;Users</span></p>
+<p>The following users are needed by HTCondor-CE at all sites:</p>
+<table>
+<thead>
+<tr>
+<th><strong>User</strong></th>
+<th><strong>Comment</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>condor</code></td>
+<td>The HTCondor-CE will be run as root, but perform most of its operations as the <code>condor</code> user.</td>
+</tr>
+<tr>
+<td><code>gratia</code></td>
+<td>Runs the Gratia probes to collect accounting data</td>
+</tr>
+<tr>
+<td><code>tomcat</code></td>
+<td>Default user that runs GIP</td>
+</tr>
+</tbody>
+</table>
 <h3 id="certificates">Certificates</h3>
-<p>Certificate        User that owns certificate   Path to certificate</p>
-<hr />
-<p>Host certificate   <code>root</code>                       <code>/etc/grid-security/hostcert.pem</code> \&lt;br> <code>/etc/grid-security/hostkey.pem</code></p>
+<table>
+<thead>
+<tr>
+<th>Certificate</th>
+<th>User that owns certificate</th>
+<th>Path to certificate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Host certificate</td>
+<td><code>root</code></td>
+<td><code>/etc/grid-security/hostcert.pem</code> \&lt;br> <code>/etc/grid-security/hostkey.pem</code></td>
+</tr>
+</tbody>
+</table>
 <p>Find instructions to request a host certificate
-<a href="Documentation/Release3.GetHostServiceCertificates">here</a>.</p>
+<a href="GetHostServiceCertificates">here</a>.</p>
 <!--  TODO: Fixup
 ### Networking
 <span class="twiki-macro STARTSECTION">Firewalls</span> <span
