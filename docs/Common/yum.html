@@ -160,7 +160,7 @@ depending on your EL version:</p>
 <p>For EL versions greater than EL5, install the files directly from
 <code>repo.grid.iu</code>:</p>
 <pre><code>rpm -Uvh URL</code></pre>
-<p>Where <code>%RED%URL%ENDCOLOR%</code> is one of the following:</p>
+<p>Where <code>URL</code> is one of the following:</p>
 <table>
 <thead>
 <tr>
@@ -197,28 +197,24 @@ that causes failed installations.</p>
 want to enable another one, such as <code>osg-testing</code>, then edit its file
 (e.g. <code>/etc/yum.repos.d/osg-testing.repo</code>) and change the enabled option
 from 0 to 1:</p>
-<p>``` {.file}
-[osg-testing]
-name=OSG Software for Enterprise Linux 5 - Testing - $basearch</p>
-<h1 id="baseurl">baseurl=<a href="http://repo.grid.iu.edu/osg/3.2/el5/testing/$basearch">http://repo.grid.iu.edu/osg/3.2/el5/testing/$basearch</a></h1>
-<p>mirrorlist=<a href="http://repo.grid.iu.edu/mirror/osg/3.2/el5/testing/$basearch">http://repo.grid.iu.edu/mirror/osg/3.2/el5/testing/$basearch</a>
+<pre><code>[osg-testing]
+name=OSG Software for Enterprise Linux 5 - Testing - $basearch
+#baseurl=http://repo.grid.iu.edu/osg/3.2/el5/testing/$basearch
+mirrorlist=http://repo.grid.iu.edu/mirror/osg/3.2/el5/testing/$basearch
 failovermethod=priority
 priority=98
 enabled=%RED%1%ENDCOLOR%
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG</p>
-<pre><code>
-
-&lt;span class="twiki-macro WARNING"&gt;&lt;/span&gt; if you have your own mirror or
-configuration of the EPEL repository, you **MUST** verify that the OSG
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG</code></pre>
+<p>If you have your own mirror or
+configuration of the EPEL repository, you <strong>MUST</strong> verify that the OSG
 repository has a better yum priority than EPEL. Otherwise, you will have
-strange dependency resolution issues.
-
-References
-==========
-
--   [Basic use of Yum](Common/YumRpmBasics)
--   [Best practices in using Yum](Common/InstallBestPractices)</code></pre>
+strange dependency resolution issues.</p>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="Common/YumRpmBasics">Basic use of Yum</a></li>
+<li><a href="Common/InstallBestPractices">Best practices in using Yum</a></li>
+</ul>
                 </section>
 
             </div>
