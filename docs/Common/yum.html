@@ -101,9 +101,10 @@ depend on packages distributed via the
 repositories must be enabled.</p>
 <h3 id="install-epel">Install EPEL</h3>
 <ul>
-<li>Install the EPEL repository, if not already present. <strong>Note:</strong> This
+<li>
+<p>Install the EPEL repository, if not already present. <strong>Note:</strong> This
 enables EPEL by default. Choose the right version to match your OS
-version.
+version.</p>
 <pre><code># EPEL 5 (For RHEL 5, CentOS 5, and SL 5)
 $ curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-5.noarch.rpm
 $ rpm -Uvh epel-release-latest-5.noarch.rpm
@@ -114,7 +115,8 @@ $ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rp
 <p><strong>WARNING</strong>: if you have your own mirror or configuration of the EPEL
 repository, you <strong>MUST</strong> verify that the OSG repository has a better yum
 priority than EPEL (<a href="Common/InstallBestPractices#YumPriorities">details</a>).
-Otherwise, you will have strange dependency resolution (<em>depsolving</em>) issues.</p></li>
+Otherwise, you will have strange dependency resolution (<em>depsolving</em>) issues.</p>
+</li>
 </ul>
 <h3 id="install-the-yum-priorities-package">Install the Yum priorities package</h3>
 <p>For packages that exist in both OSG and EPEL repositories, it is
