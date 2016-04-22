@@ -48,13 +48,13 @@
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
                     <h1 id="frontier-squid-caching-proxy-installation-guide">Frontier Squid Caching Proxy Installation Guide</h1>
 <p><span class="twiki-macro TOC" depth="3"></span></p>
-<h1 id="about-this-document">About This Document</h1>
+<h2 id="about-this-document">About This Document</h2>
 <p>This document is intended for System Administrators who are installing
 <code>frontier-squid</code>, the OSG distribution of the Frontier Squid software.</p>
-<h1 id="applicable-versions">Applicable Versions</h1>
+<h2 id="applicable-versions">Applicable Versions</h2>
 <p>The applicable software versions for this document are OSG Version &gt;= 3.1.40 or &gt;=
 3.2.16. The version of frontier-squid installed should be &gt;= 2.7.STABLE9-19.1</p>
-<h1 id="about-frontier-squid">About Frontier Squid</h1>
+<h2 id="about-frontier-squid">About Frontier Squid</h2>
 <p>Frontier Squid is a distribution of the well-known <a href="http://squid-cache.org">squid HTTP caching
 proxy software</a> that is optimized for use with
 applications on the Worldwide LHC Computing Grid (WLCG). It has <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Why_use_frontier_squid_instead_o">many
@@ -63,7 +63,7 @@ over regular squid for common grid applications, especially Frontier and
 CVMFS.</p>
 <p>The OSG distribution of frontier-squid is a straight rebuild of the
 upstream frontier-squid package for the convenience of OSG users.</p>
-<h1 id="frontier-squid-is-recommended">Frontier Squid is Recommended</h1>
+<h2 id="frontier-squid-is-recommended">Frontier Squid is Recommended</h2>
 <p>OSG recommends that all sites run a caching proxy for HTTP and HTTPS to
 help reduce bandwidth and improve throughput. To that end, Compute
 Element (CE) installations include Frontier Squid automatically. We
@@ -78,18 +78,18 @@ CE host to refer to the proxy on that host.</p>
 users who have not added the proxy location to their CE configuration.
 In the future, a proxy will be required and osg-configure will fail if
 the proxy location is not set.</p>
-<h1 id="engineering-considerations">Engineering Considerations</h1>
+<h2 id="engineering-considerations">Engineering Considerations</h2>
 <p>If you will be supporting the Frontier application at your site, review
 the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Hardware">upstream documentation Hardware considerations
 section</a>
 to determine how to size your equipment.</p>
-<h1 id="requirements">Requirements</h1>
-<h2 id="host-and-os">Host and OS</h2>
+<h2 id="requirements">Requirements</h2>
+<h3 id="host-and-os">Host and OS</h3>
 <ul>
 <li>OS is Red Hat Enterprise Linux 5, 6, 7, and variants</li>
 <li>Root access</li>
 </ul>
-<h2 id="users-the-frontier-squid-installation-will-create-one-user-account">Users The frontier-squid installation will create one user account</h2>
+<h3 id="users-the-frontier-squid-installation-will-create-one-user-account">Users The frontier-squid installation will create one user account</h3>
 <p>unless it already exists.</p>
 <table>
 <thead>
@@ -109,7 +109,7 @@ to determine how to size your equipment.</p>
 create a configuration file before installation. Details are in the
 <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Preparation">upstream documentation Preparation
 section</a>.</p>
-<h2 id="networking">Networking</h2>
+<h3 id="networking">Networking</h3>
 <table>
 <thead>
 <tr>
@@ -147,7 +147,7 @@ lines=&quot;squid,squidmonitor&quot;&gt;Documentation/Release3.FirewallInformati
 <p>The addresses of the WLCG monitoring servers for use in firewalls are
 listed in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Enabling_monitoring">upstream documentation Enabling monitoring
 section</a>.</p>
-<h1 id="install-instructions">Install Instructions</h1>
+<h2 id="install-instructions">Install Instructions</h2>
 <h3 id="install-the-yum-repositories-required-by-osg">Install the Yum Repositories required by OSG</h3>
 <p>The OSG RPMs currently support Red Hat Enterprise Linux 5, 6, 7, and variants</p>
 <p>OSG RPMs are distributed via the OSG yum repositories. Some packages depend on packages distributed via the EPEL repositories. So both repositories must be enabled.</p>
@@ -171,7 +171,8 @@ section</a>.</p>
 <p>Replace PACKAGE with the package name from the previous step.</p></li>
 <li>Ensure that <code>/etc/yum.conf</code> has the following line in the <code>[main]</code> section (particularly when using ROCKS), thereby enabling Yum plugins, including the priorities one:
 <pre><code>plugins=1</code></pre>
-<p><em>NOTE</em>: If you do not have a required key you can force the installation using <code>--nogpgcheck</code>; e.g., <code>yum install --nogpgcheck yum-priorities</code></p></li>
+<p><em>NOTE</em>: If you do not have a required key you can force the installation using <code>--nogpgcheck</code>; e.g., </p>
+<pre><code>yum install --nogpgcheck yum-priorities</code></pre></li>
 </ol>
 <h4 id="install-osg-repositories">Install OSG Repositories</h4>
 <ol>
@@ -249,43 +250,32 @@ reasons to change them</li>
 </ol>
 <h1 id="starting-and-stopping-the-frontier-squid-service">Starting and Stopping the Frontier Squid Service</h1>
 <p>Starting frontier-squid:</p>
-<p>``` {.rootscreen}
-[root@client ~]# service frontier-squid start</p>
-<pre><code>
-Stopping frontier-squid:
-
-``` {.rootscreen}
-[root@client ~]# service frontier-squid stop</code></pre>
+<pre><code>[root@client ~]# service frontier-squid start</code></pre>
+<p>Stopping frontier-squid:</p>
+<pre><code>[root@client ~]# service frontier-squid stop</code></pre>
 <h1 id="testing-frontier-squid">Testing Frontier Squid</h1>
 <p>As any user on another computer, do the following (where
 %RED%yoursquid.your.domain<span class="twiki-macro ENDCOLOR"></span> is
 the fully qualified domain name of your squid server):</p>
-<p>``` {.screen}
-[user@client ~]$ export http_proxy=<a href="http://yoursquid.your.domain:3128">http://yoursquid.your.domain:3128</a>
-[user@client ~]$ wget -qdO/dev/null <a href="http://frontier.cern.ch">http://frontier.cern.ch</a> 2&gt;&amp;1|grep X-Cache
+<pre><code>[user@client ~]$ export http_proxy=http://yoursquid.your.domain:3128
+[user@client ~]$ wget -qdO/dev/null http://frontier.cern.ch 2&gt;&amp;1|grep X-Cache
 X-Cache: MISS from yoursquid.your.domain
-[user@client ~]$ wget -qdO/dev/null <a href="http://frontier.cern.ch">http://frontier.cern.ch</a> 2&gt;&amp;1|grep X-Cache
-X-Cache: HIT from yoursquid.your.domain</p>
-<pre><code>
-
-If the grep doesn’t print anything, try removing it from the pipeline to
+[user@client ~]$ wget -qdO/dev/null http://frontier.cern.ch 2&gt;&amp;1|grep X-Cache
+X-Cache: HIT from yoursquid.your.domain</code></pre>
+<p>If the grep doesn’t print anything, try removing it from the pipeline to
 see if errors are obvious. If the second try says MISS again, something
-is probably wrong with the squid cache writes.
-
-If your squid will be supporting the Frontier application, it is also
-good to do the test in the [upstream documentation Testing the
+is probably wrong with the squid cache writes.</p>
+<p>If your squid will be supporting the Frontier application, it is also
+good to do the test in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Testing_the_installation">upstream documentation Testing the
 installation
-section](https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Testing_the_installation).
-
-# Frontier Squid Log Files
-
-Log file contents are explained in the [upstream documentation Log file
+section</a>.</p>
+<h2 id="frontier-squid-log-files">Frontier Squid Log Files</h2>
+<p>Log file contents are explained in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Log_file_contents">upstream documentation Log file
 contents
-section](https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Log_file_contents).
-
-# Getting Help 
-To get assistance please use [Help
-Procedure](HelpProcedure).</code></pre>
+section</a>.</p>
+<h2 id="getting-help">Getting Help</h2>
+<p>To get assistance please use <a href="HelpProcedure">Help
+Procedure</a>.</p>
                 </section>
 
             </div>
