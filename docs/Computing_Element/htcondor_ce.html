@@ -90,30 +90,70 @@ HTCondor CE job router) and other support software (e.g., GridFTP, a
 Gratia probe, authorization software). To simplify installation, OSG
 provides convenience RPMs that install all required software with a
 single command.</p>
-<p>\&lt;ol> &lt;span class=&quot;twiki-macro INCLUDE&quot;
-section=&quot;Update&quot;&gt;Documentation/Release3/OSGReleaseSeries</span> \&lt;li>
-\&lt;p>If your batch system is already installed via non-RPM means and is
+<ol>
+<li>
+<p>If your batch system is already installed via non-RPM means and is
 in the following list, install the appropriate 'empty' RPM. Otherwise,
-skip to the next step.\&lt;/p> &lt;span class=&quot;twiki-macro TABLE&quot;
-sort=&quot;off&quot;&gt;</span></p>
-<p>If your batch system is…   Then run the following command…</p>
-<hr />
-<p>HTCondor                   <code>yum install empty-condor --enablerepo=osg-empty</code>
-PBS                        <code>yum install empty-torque --enablerepo=osg-empty</code>
-SGE                        <code>yum install empty-gridengine --enablerepo=osg-empty</code></p>
-<p>\&lt;/li> \&lt;li> \&lt;p>Select the appropriate convenience RPM(s):\&lt;/p>
-<span class="twiki-macro TABLE" sort="off"></span></p>
-<p>If your batch system is…   Then use the following package(s)…</p>
-<hr />
-<p>HTCondor                   <code>osg-ce-condor</code>
-LSF                        <code>osg-ce-lsf</code>
-PBS                        <code>osg-ce-pbs</code>
-SGE                        <code>osg-ce-sge</code>
-SLURM                      <code>osg-ce-slurm</code></p>
-<p>\&lt;/li> \&lt;li> \&lt;p>Install the CE software:\&lt;/p> \&lt;pre
-class=&quot;rootscreen&quot;><span class="twiki-macro UCL_PROMPT_ROOT"></span>
-yum install <em>PACKAGE(S)</em>\&lt;/pre> \&lt;/li> \&lt;/ol></p>
-<p><span class="twiki-macro NOTE"></span> To ease the transition from GRAM
+skip to the next step.</p>
+<table>
+<thead>
+<tr>
+<th>If your batch system is…</th>
+<th>Then run the following command…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTCondor</td>
+<td><code>yum install empty-condor --enablerepo=osg-empty</code></td>
+</tr>
+<tr>
+<td>PBS</td>
+<td><code>yum install empty-torque --enablerepo=osg-empty</code></td>
+</tr>
+<tr>
+<td>SGE</td>
+<td><code>yum install empty-gridengine --enablerepo=osg-empty</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Select the appropriate convenience RPM(s):</p>
+<table>
+<thead>
+<tr>
+<th>If your batch system is…</th>
+<th>Then use the following package(s)…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTCondor</td>
+<td><code>osg-ce-condor</code></td>
+</tr>
+<tr>
+<td>LSF</td>
+<td><code>osg-ce-lsf</code></td>
+</tr>
+<tr>
+<td>PBS</td>
+<td><code>osg-ce-pbs</code></td>
+</tr>
+<tr>
+<td>SGE</td>
+<td><code>osg-ce-sge</code></td>
+</tr>
+<tr>
+<td>SLURM</td>
+<td><code>osg-ce-slurm</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>Install the CE software: <pre class="rootscreen"> $yum install <em>PACKAGE(S)</em></pre></li>
+</ol>
+<p>To ease the transition from GRAM
 to HTCondor-CEs, the convenience RPMs install both types of job gateway
 software. By default, the HTCondor gateway is enabled and the GRAM
 gateway is disabled, which is the correct configuration for most
