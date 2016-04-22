@@ -153,7 +153,7 @@ software. By default, the HTCondor gateway is enabled and the GRAM
 gateway is disabled, which is the correct configuration for most
 HTCondor-CE-based sites (but see the gateway configuration section below
 for more options).</p>
-<p><span class="twiki-macro NOTE"></span> HTCondor CE version 1.6 or later
+<p><strong>NOTE</strong>: HTCondor CE version 1.6 or later
 is required to send site resource information to OSG for matching jobs
 to resources.</p>
 <h2 id="configuring-htcondor-ce">Configuring HTCondor-CE</h2>
@@ -287,7 +287,7 @@ resources like the number of available cores and what VO's are allowed
 to run on your site. Consult the <a href="Documentation.Release3.GipConfiguration">GIP configuration
 document</a> for instructions on
 how to set up your <code>GIP</code> service.</p>
-<p><span class="twiki-macro NOTE"></span> If you have <code>gip-1.3.11-4</code>
+<p><strong>NOTE</strong>: If you have <code>gip-1.3.11-4</code>
 installed, manual intervention is required for correct reporting to
 BDII. See <a href="Documentation/Release3.Release3220#KnownIssues">3.2.20 known
 issues</a>.</p>
@@ -310,13 +310,9 @@ certificates need to be owned by the appropriate user.</p>
 <p>Generate a <code>user-vo-map</code> file with your authorization set
 up:
 i.  If you're using edg-mkgridmap, run the following:</p>
-<pre><code>```
-edg-mkgridmap
-```</code></pre>
+<pre><code>edg-mkgridmap</code></pre>
 <p>ii. If you're using GUMS, run the following:</p>
-<pre><code>```
-gums-host-cron
-```</code></pre>
+<pre><code>gums-host-cron</code></pre>
 </li>
 </ol>
 <h3 id="applying-configuration-settings">Applying configuration settings</h3>
@@ -364,7 +360,7 @@ HTCondor CE</a>.</p>
 <p>If you need to modify or filter jobs, more information can be found in
 the <a href="Documentation/Release3.JobRouterRecipes">Job Router Recipes</a>
 document.</p>
-<p><span class="twiki-macro NOTE"></span> If you need to assign jobs to
+<p><strong>NOTE</strong>: If you need to assign jobs to
 HTCondor accounting groups, refer to <a href="#AccountingGroups">this</a> section.</p>
 <h4 id="configuring-for-multiple-network-interfaces">Configuring for multiple network interfaces</h4>
 <p>If you have multiple network interfaces with different hostnames, the
@@ -372,9 +368,8 @@ HTCondor CE daemons need to know which hostname to use when
 communicating to each other. Generally, you will want to set
 <code>NETWORK_HOSTNAME</code> to the hostname of your public interface in
 <code>/etc/condor-ce/config.d/99-local.conf</code> directory with the line:</p>
-<pre><code>NETWORK_HOSTNAME=&lt;span style="background-color: #FFCCFF;"&gt;condorce.example.com&lt;/span&gt;</code></pre>
-<p>Replacing \&lt;span style=&quot;background-color:
-#FFCCFF;&quot;>condorce.example.com\&lt;/span> text with your public
+<pre><code>NETWORK_HOSTNAME=condorce.example.com</code></pre>
+<p>Replacing <code>condorce.example.com</code> text with your public
 interface’s hostname.</p>
 <h4 id="limiting-or-disabling-locally-jobs-running-on-the-ce">Limiting or disabling locally jobs running on the CE</h4>
 <p>If you want to limit or disable jobs running locally on your CE, you
@@ -384,40 +379,37 @@ managed fork: they allow jobs to be run on the CE itself. The two
 universes are effectively the same (scheduler universe launches a
 starter process for each job), so we will be configuring them in unison.</p>
 <ul>
-<li><strong>To change the default limit</strong> on the number of locally run jobs
+<li>
+<p><strong>To change the default limit</strong> on the number of locally run jobs
 (the current default is 20), add the following to
-<code>/etc/condor-ce/config.d/99-local.conf</code>: \&lt;pre
-class='file'>START_LOCAL_UNIVERSE = \&lt;span
-style=&quot;background-color: #FFCCFF;&quot;>TotalLocalJobsRunning +
-TotalSchedulerJobsRunning \&lt; \&lt;job limit>\&lt;/span></li>
+<code>/etc/condor-ce/config.d/99-local.conf</code>:</p>
+<pre><code>LOCAL_JOB_LIMIT = 20
+START_LOCAL_UNIVERSE = TotalLocalJobsRunning + TotalSchedulerJobsRunning &lt; $(LOCAL_JOB_LIMIT)
+START_SCHEDULER_UNIVERSE = $(START_LOCAL_UNIVERSE)</code></pre>
+<p>(updating <code>LOCAL_JOB_LIMIT</code> as appropriate.)</p>
+</li>
+<li>
+<p><strong>To only allow a specific user</strong> to start locally run jobs, add the
+following to <code>/etc/condor-ce/config.d/99-local.conf</code>:</p>
+<pre><code>ALLOWED_LOCAL_USER=alice
+START_LOCAL_UNIVERSE = target.Owner =?= "$(ALLOWED_LOCAL_USER)"
+START_SCHEDULER_UNIVERSE = $(START_LOCAL_UNIVERSE)</code></pre>
+</li>
+<li>
+<p><strong>To disable</strong> locally run jobs, add the following to
+<code>/etc/condor-ce/config.d/99-local.conf</code>:</p>
+<pre><code>START_LOCAL_UNIVERSE = False
+START_SCHEDULER_UNIVERSE = $(START_LOCAL_UNIVERSE)</code></pre>
+</li>
 </ul>
-<p>START_SCHEDULER_UNIVERSE = \$(START_LOCAL_UNIVERSE)\&lt;/pre></p>
-<ul>
-<li><strong>To only allow a specific user</strong> to start locally run jobs, add the
-following to <code>/etc/condor-ce/config.d/99-local.conf</code>: \&lt;pre
-class='file'>START_LOCAL_UNIVERSE = \&lt;span
-style=&quot;background-color: #FFCCFF;&quot;>target.Owner <code>?</code>
-&quot;\&lt;username>&quot;\&lt;/span></li>
-</ul>
-<p>START_SCHEDULER_UNIVERSE = \$(START_LOCAL_UNIVERSE)\&lt;/pre></p>
-<ul>
-<li><strong>To disable</strong> locally run jobs, add the following to
-<code>/etc/condor-ce/config.d/99-local.conf</code>: \&lt;pre
-class='file'>START_LOCAL_UNIVERSE = \&lt;span
-style=&quot;background-color: #FFCCFF;&quot;>False\&lt;/span></li>
-</ul>
-<p>START_SCHEDULER_UNIVERSE = \$(START_LOCAL_UNIVERSE)\&lt;/pre></p>
-<p><span class="twiki-macro NOTE"></span> RSV requires the ability to start
+<p><strong>NOTE</strong>: RSV requires the ability to start
 local universe jobs so if you are using RSV, you need to allow local
 universe jobs from the <code>rsv</code> user.</p>
-<p>#AccountingGroups</p>
 <h4 id="htcondor-accounting-groups">HTCondor accounting groups</h4>
-<p><span class="twiki-macro NOTE"></span> For HTCondor batch systems only</p>
+<p><strong>NOTE</strong>: For HTCondor batch systems only</p>
 <p>If you want to provide fairshare on a group basis, as opposed to a Unix
 user basis, you can use HTCondor accounting groups. They are independent
-of the Unix groups the user may already be in, and are <a href="http://research.cs.wisc.edu/condor/manual/v8.2/3_4User_Priorities.html#SECTION00447000000000000000">documented in
-the HTCondor
-manual</a>.
+of the Unix groups the user may already be in, and are <a href="http://research.cs.wisc.edu/condor/manual/v8.4/3_4User_Priorities.html#SECTION00447000000000000000">documented in the HTCondor manual</a>.
 If you are using HTCondor accounting groups, you can map jobs from the
 CE into HTCondor accounting groups based on their numeric user id, their
 DN, or their VOMS attributes.</p>
@@ -443,17 +435,19 @@ cms\/Role=production cms.prod
 <p>The HTCondor-CE-View is an optional web interface to the status of your
 CE. To run the View,</p>
 <ol>
-<li>Begin by installing the package htcondor-ce-view: \&lt;pre
-class=&quot;rootscreen&quot;>&lt;span
-class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span> yum install
-htcondor-ce-view\&lt;/pre></li>
-<li>Next, uncomment the <code>DAEMON_LIST</code> configuration located at
-<code>/etc/condor-ce/config.d/05-ce-view.conf</code>: \&lt;pre
-class=&quot;file&quot;>DAEMON_LIST = \$(DAEMON_LIST), CEVIEW,
-GANGLIAD\&lt;/pre></li>
-<li>Restart the CE service. \&lt;pre class=&quot;rootscreen&quot;>&lt;span
-class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span> service condor-ce
-restart\&lt;/pre></li>
+<li>
+<p>Begin by installing the package htcondor-ce-view:</p>
+<pre><code>yum install htcondor-ce-view</code></pre>
+</li>
+<li>
+<p>Next, uncomment the <code>DAEMON_LIST</code> configuration located at
+<code>/etc/condor-ce/config.d/05-ce-view.conf</code>:</p>
+<pre><code>DAEMON_LIST = $(DAEMON_LIST), CEVIEW, GANGLIAD</code></pre>
+</li>
+<li>
+<p>Restart the CE service.</p>
+<pre><code>service condor-ce restart</code></pre>
+</li>
 </ol>
 <p>By default, the website is served from port 80. This may be configured
 in <code>/etc/condor-ce/config.d/05-ce-view.conf</code> as well.</p>
@@ -466,7 +460,6 @@ HTCondor CE:</p>
 job gateway</li>
 <li>Using HTCondor CE user tools to test gateway operations</li>
 </ul>
-<p>#ManagingServices</p>
 <h3 id="managing-htcondor-ce-and-associated-services">Managing HTCondor CE and associated services</h3>
 <p>In addition to the HTCondor CE job gateway service itself, there are a
 number of supporting services in your installation. The specific
@@ -631,9 +624,9 @@ following command:</p>
 <table>
 <thead>
 <tr>
-<th>Certificate</th>
-<th>User that owns certificate</th>
-<th>Path to certificate</th>
+<th><strong>Certificate</strong></th>
+<th><strong>User that owns certificate</strong></th>
+<th><strong>Path to certificate</strong></th>
 </tr>
 </thead>
 <tbody>
@@ -644,8 +637,7 @@ following command:</p>
 </tr>
 </tbody>
 </table>
-<p>Find instructions to request a host certificate
-<a href="GetHostServiceCertificates">here</a>.</p>
+<p>Find instructions to request a host certificate <a href="GetHostServiceCertificates">here</a>.</p>
 <!--  TODO: Fixup
 ### Networking
 <span class="twiki-macro STARTSECTION">Firewalls</span> <span
