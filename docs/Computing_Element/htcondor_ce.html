@@ -47,7 +47,6 @@
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
                     <h1 id="installing-and-maintaining-htcondor-ce">Installing and Maintaining HTCondor-CE</h1>
-<p><span class="twiki-macro TOC" depth="3"></span></p>
 <h2 id="about-this-guide">About This Guide</h2>
 <p>The HTCondor-CE software is a <em>job gateway</em> for an OSG Compute Element
 (CE). As such, HTCondor-CE is the entry point for jobs coming from the
@@ -76,7 +75,7 @@ host) steps to prepare in advance:</p>
 <li>Ensure the host has <a href="SupportedOperatingSystems">a supported operating
 system</a></li>
 <li>Obtain root access to the host</li>
-<li>Prepare <a href="YumRepositories">the required Yum repositories</a></li>
+<li>Prepare <a href="/Common/yum">the required Yum repositories</a></li>
 <li>Install <a href="InstallCertAuth">CA certificates</a></li>
 </ul>
 <h2 id="installing-htcondor-ce">Installing HTCondor-CE</h2>
@@ -170,51 +169,44 @@ However, if you are updating a host that used a Globus GRAM job gateway
 <ol>
 <li>Decide whether to disable GRAM (the preferred option) or run
 both HTCondor and GRAM CEs</li>
-<li>Edit the gateway configuration file
+<li>
+<p>Edit the gateway configuration file
 <code>/etc/osg/config.d/10-gateway.ini</code> to reflect your choice
-To enable HTCondor CE and disable GRAM CE:
-<pre><code>gram_gateway_enabled = False</code></pre></li>
+To enable HTCondor CE and disable GRAM CE:</p>
+<pre><code>gram_gateway_enabled = False
+htcondor_gateway_enabled = True</code></pre>
+<p>To enable both HTCondor and GRAM CEs:</p>
+<pre><code>gram_gateway_enabled = True
+htcondor_gateway_enabled = True</code></pre>
+</li>
 </ol>
-<p>htcondor_gateway_enabled = True\&lt;/pre>\ \&lt;p>To enable both HTCondor
-and GRAM CEs:\&lt;/p>\ \&lt;pre class=&quot;file&quot;>gram_gateway_enabled = True
-htcondor_gateway_enabled = True\&lt;/pre></p>
-<p>More information about the Globus GRAM CE can be found
-<a href="Documentation.Release3.InstallComputeElement">here</a>.</p>
-<p>#BatchSystem</p>
+<p>More information about the Globus GRAM CE can be found <a href="Computing_Element/InstallComputeElement">here</a>.</p>
+<h2 id="batchsystem">BatchSystem</h2>
 <h3 id="configuring-the-batch-system">Configuring the batch system</h3>
 <p>Enable your batch system by editing the <code>enabled</code> field in the
 <code>/etc/osg/config.d/20-&lt;span style="background-color: #FFCCFF;"&gt;YOUR BATCH SYSTEM&lt;/span&gt;.ini</code>
 file:\</p>
-<p>``` {.file}
-enabled = <span style="background-color: #FFCCFF;">True</span></p>
-<pre><code>
-#### Batch systems other than HTCondor
-
-If you are using HTCondor as your **local batch system** (i.e., in
-addition to your HTCondor CE), skip to the [configuring
-authorization](#ConfiguringAuthorization) section. For other batch
-systems (e.g., PBS, LSF, SGE, SLURM), keep reading.
-
-##### Sharing the spool directory
-
-To transfer files between the CE and the batch system, HTCondor CE
+<pre><code>enabled = &lt;span style="background-color: #FFCCFF;"&gt;True&lt;/span&gt;</code></pre>
+<h4 id="batch-systems-other-than-htcondor">Batch systems other than HTCondor</h4>
+<p>If you are using HTCondor as your <strong>local batch system</strong> (i.e., in
+addition to your HTCondor CE), skip to the <a href="#ConfiguringAuthorization">configuring
+authorization</a> section. For other batch
+systems (e.g., PBS, LSF, SGE, SLURM), keep reading.</p>
+<h5 id="sharing-the-spool-directory">Sharing the spool directory</h5>
+<p>To transfer files between the CE and the batch system, HTCondor CE
 requires a shared file system. The current recommendation is to run a
 dedicated NFS server (whose installation is beyond the scope of this
-document) on the **CE host**. In this setup, HTCondor-CE writes to the
+document) on the <strong>CE host</strong>. In this setup, HTCondor-CE writes to the
 local spool directory, the NFS server exports the it, and the NFS server
-shares the it with all of the worker nodes.
-
-&lt;span class="twiki-macro NOTE"&gt;&lt;/span&gt; If you choose not to host the NFS
+shares the it with all of the worker nodes.</p>
+<p><span class="twiki-macro NOTE"></span> If you choose not to host the NFS
 server on your CE, you will need to turn off root squash so that the
-HTCondor-CE daemons can write to the spool directory.
-
-By default, the spool directory is `/var/lib/condor-ce` but you can
-control this by setting `SPOOL` in
-`/etc/condor-ce/config.d/99-local.conf`. For example, the following sets
-the `SPOOL` directory to `/home/condor`:
-
-``` {.file}
-SPOOL=/home/condor</code></pre>
+HTCondor-CE daemons can write to the spool directory.</p>
+<p>By default, the spool directory is <code>/var/lib/condor-ce</code> but you can
+control this by setting <code>SPOOL</code> in
+<code>/etc/condor-ce/config.d/99-local.conf</code>. For example, the following sets
+the <code>SPOOL</code> directory to <code>/home/condor</code>:</p>
+<pre><code>SPOOL=/home/condor</code></pre>
 <p><span class="twiki-macro NOTE"></span> The shared spool directory must
 be readable and writeable by the <code>condor</code> user for HTCondor CE to
 function correctly.</p>
@@ -222,249 +214,238 @@ function correctly.</p>
 <p>Worker node proxy renewal is not used by HTCondor-CE and leaving it on
 will cause some jobs to be held. Edit <code>/etc/blah.config</code> on the
 HTCondor CE host and set the following two values:</p>
-<p>``` {.file}
-blah_disable_wn_proxy_renewal=yes
-blah_delegate_renewed_proxies=no</p>
-<pre><code>
-&lt;span class="twiki-macro NOTE"&gt;&lt;/span&gt; There should be no whitespace
-around the `=`.
-
-\#ConfiguringAuthorization
-
-### Configuring authorization
-
-There are two methods to manage authorization for incoming jobs,
+<pre><code>blah_disable_wn_proxy_renewal=yes
+blah_delegate_renewed_proxies=no</code></pre>
+<p><span class="twiki-macro NOTE"></span> There should be no whitespace
+around the <code>=</code>.</p>
+<h2 id="configuringauthorization">ConfiguringAuthorization</h2>
+<h3 id="configuring-authorization">Configuring authorization</h3>
+<p>There are two methods to manage authorization for incoming jobs,
 edg-mkgridmap and GUMS. edg-mkgridmap is easy to set up and maintain,
 and GUMS has more features and capabilities. We recommend using
 edg-mkgridmap unless you have specific needs that require the use of
-GUMS. Some examples of these specific requirements are:
-
--   You want to map users based on rules
--   You need to support multiple VO roles
--   You need to support gLExec for pilot jobs
-
-#### Authorization with edg-mkgridmap
-
-To configure your CE to use edg-mkgridmap:
-
-1.  \&lt;p\&gt;Follow the configuration instructions in [the edg-mkgridmap
-    document](Edg-mkgridmap) to define the VOs that your site
-    accepts\&lt;/p\&gt;
-2.  \&lt;p\&gt;Set some critical gridmap attributes by editing the
-    `/etc/osg/config.d/10-misc.ini` file on the HTCondor CE
-    host:\&lt;/p\&gt;\\ \&lt;pre class="file"\&gt;
-
-authorization\_method = gridmap \&lt;/pre\&gt;
-
-1.  \&lt;p\&gt;Enable edg-mkgridmap and disable GUMS in the `/etc/lcmaps.db`
-    file\&lt;/p\&gt;\\ \&lt;p\&gt;In the `authorize_only` section, comment out the
-    `gumsclient` line and uncomment the `gridmapfile` line. The result
-    should be as follows:\&lt;/p\&gt;\\ \&lt;pre class="file"\&gt;
-
-authorize\_only: \# gumsclient -\&gt; good | bad gridmapfile -\&gt; good | bad
-\&lt;/pre\&gt;
-
-1.  \&lt;p\&gt;Specify the location of your grid mapfile in
-    `/etc/condor-ce/config.d/01-common-auth.conf`:\&lt;/p\&gt;\\ \&lt;pre
-    class="file"\&gt;GRIDMAP = /etc/grid-security/grid-mapfile\&lt;/pre\&gt;\\
-    \&lt;p\&gt;**Note:** The standard location for the grid mapfile is shown
-    above. Use that location unless you have specific reasons to put the
-    file somewhere else.\&lt;/p\&gt;
-
-#### Authorization with GUMS
-
-1.  \&lt;p\&gt;Follow the instructions in [the GUMS installation and
-    configuration document](InstallGums) to prepare GUMS\&lt;/p\&gt;
-2.  \&lt;p\&gt;Set some critical GUMS attributes by editing the
-    `/etc/osg/config.d/10-misc.ini` file on the HTCondor CE
-    host:\&lt;/p\&gt;\\ \&lt;pre class="file"\&gt;
-
-authorization\_method = xacml gums\_host = \&lt;span
-style="background-color: \#FFCCFF;"\&gt;YOUR GUMS HOSTNAME\&lt;/span\&gt;
-\&lt;/pre\&gt;
-
-&lt;span class="twiki-macro NOTE"&gt;&lt;/span&gt; Once gsi-authz.conf is in place,
+GUMS. Some examples of these specific requirements are:</p>
+<ul>
+<li>You want to map users based on rules</li>
+<li>You need to support multiple VO roles</li>
+<li>You need to support gLExec for pilot jobs</li>
+</ul>
+<h4 id="authorization-with-edg-mkgridmap">Authorization with edg-mkgridmap</h4>
+<p>To configure your CE to use edg-mkgridmap:</p>
+<ol>
+<li>\&lt;p>Follow the configuration instructions in <a href="Edg-mkgridmap">the edg-mkgridmap
+document</a> to define the VOs that your site
+accepts\&lt;/p></li>
+<li>\&lt;p>Set some critical gridmap attributes by editing the
+<code>/etc/osg/config.d/10-misc.ini</code> file on the HTCondor CE
+host:\&lt;/p>\ \&lt;pre class=&quot;file&quot;></li>
+</ol>
+<p>authorization_method = gridmap \&lt;/pre></p>
+<ol>
+<li>\&lt;p>Enable edg-mkgridmap and disable GUMS in the <code>/etc/lcmaps.db</code>
+file\&lt;/p>\ \&lt;p>In the <code>authorize_only</code> section, comment out the
+<code>gumsclient</code> line and uncomment the <code>gridmapfile</code> line. The result
+should be as follows:\&lt;/p>\ \&lt;pre class=&quot;file&quot;></li>
+</ol>
+<p>authorize_only: # gumsclient -> good | bad gridmapfile -> good | bad
+\&lt;/pre></p>
+<ol>
+<li>\&lt;p>Specify the location of your grid mapfile in
+<code>/etc/condor-ce/config.d/01-common-auth.conf</code>:\&lt;/p>\ \&lt;pre
+class=&quot;file&quot;>GRIDMAP = /etc/grid-security/grid-mapfile\&lt;/pre>\
+\&lt;p><strong>Note:</strong> The standard location for the grid mapfile is shown
+above. Use that location unless you have specific reasons to put the
+file somewhere else.\&lt;/p></li>
+</ol>
+<h4 id="authorization-with-gums">Authorization with GUMS</h4>
+<ol>
+<li>\&lt;p>Follow the instructions in <a href="InstallGums">the GUMS installation and
+configuration document</a> to prepare GUMS\&lt;/p></li>
+<li>\&lt;p>Set some critical GUMS attributes by editing the
+<code>/etc/osg/config.d/10-misc.ini</code> file on the HTCondor CE
+host:\&lt;/p>\ \&lt;pre class=&quot;file&quot;></li>
+</ol>
+<p>authorization_method = xacml gums_host = \&lt;span
+style=&quot;background-color: #FFCCFF;&quot;>YOUR GUMS HOSTNAME\&lt;/span>
+\&lt;/pre></p>
+<p><span class="twiki-macro NOTE"></span> Once gsi-authz.conf is in place,
 your local HTCondor will attempt to utilize the LCMAPS callouts if
-enabled in the condor\_mapfile. If this is not the desired behavior, set
-GSI\_AUTHZ\_CONF=/dev/null in the local HTCondor configuration.
-
-### Configuring information systems
-
-To split jobs between the various sites of the OSG, information about
+enabled in the condor_mapfile. If this is not the desired behavior, set
+GSI_AUTHZ_CONF=/dev/null in the local HTCondor configuration.</p>
+<h3 id="configuring-information-systems">Configuring information systems</h3>
+<p>To split jobs between the various sites of the OSG, information about
 each site’s availability is uploaded to a central collector. The job
 factories then query the central collector for idle resources and submit
 pilot jobs to the available sites. To advertise your site, you will need
-to run the Generic Information Provider and OSG Info Services.
-
-#### Generic Information Provider (GIP)
-
-The `GIP` is a service that discovers information about your site
+to run the Generic Information Provider and OSG Info Services.</p>
+<h4 id="generic-information-provider-gip">Generic Information Provider (GIP)</h4>
+<p>The <code>GIP</code> is a service that discovers information about your site
 resources like the number of available cores and what VO's are allowed
-to run on your site. Consult the [GIP configuration
-document](Documentation.Release3.GipConfiguration) for instructions on
-how to set up your `GIP` service.
-
-&lt;span class="twiki-macro NOTE"&gt;&lt;/span&gt; If you have `gip-1.3.11-4`
+to run on your site. Consult the <a href="Documentation.Release3.GipConfiguration">GIP configuration
+document</a> for instructions on
+how to set up your <code>GIP</code> service.</p>
+<p><span class="twiki-macro NOTE"></span> If you have <code>gip-1.3.11-4</code>
 installed, manual intervention is required for correct reporting to
-BDII. See [3.2.20 known
-issues](Documentation/Release3.Release3220#KnownIssues).
-
-#### OSG Info Services
-
-`osg-info-services` takes the information collected from `GIP` and
-uploads it to OSG's central collector. For `osg-info-services` to
+BDII. See <a href="Documentation/Release3.Release3220#KnownIssues">3.2.20 known
+issues</a>.</p>
+<h4 id="osg-info-services">OSG Info Services</h4>
+<p><code>osg-info-services</code> takes the information collected from <code>GIP</code> and
+uploads it to OSG's central collector. For <code>osg-info-services</code> to
 communicate with the appropriate servers, it needs a service certificate
-and key located at `/etc/grid-security/http/httpcert.pem` and
-`/etc/grid-security/http/httpkey.pem`, respectively. Additionally, the
-service runs as either the `tomcat` user or the account specified by the
-`user` option in `/etc/osg/config.d/30-gip.ini`, thus your service
-certificates need to be owned by the appropriate user.
-
-1.  \&lt;p\&gt;Enable osg-info-services in
-    `/etc/osg/config.d/30-infoservices.ini`:\&lt;/p\&gt;\\ \&lt;pre
-    class="file"\&gt;enabled = *True*\&lt;/pre\&gt;
-2.  \&lt;p\&gt;Generate a `user-vo-map` file with your authorization set
-    up:\&lt;/p\&gt;
-    i.  \&lt;p\&gt;If you're using edg-mkgridmap, run the following:\&lt;/p\&gt;\\
-        \&lt;pre class="rootscreen"\&gt;&lt;span
-        class="twiki-macro UCL_PROMPT_ROOT"&gt;&lt;/span&gt;
-        edg-mkgridmap\&lt;/pre\&gt;
-    ii. \&lt;p\&gt;If you're using GUMS, run the following:\&lt;/p\&gt;\\ \&lt;pre
-        class="rootscreen"\&gt;&lt;span
-        class="twiki-macro UCL_PROMPT_ROOT"&gt;&lt;/span&gt;
-        gums-host-cron\&lt;/pre\&gt;
-
-### Applying configuration settings
-
-Making changes to the OSG configuration files in the `/etc/osg/config.d`
+and key located at <code>/etc/grid-security/http/httpcert.pem</code> and
+<code>/etc/grid-security/http/httpkey.pem</code>, respectively. Additionally, the
+service runs as either the <code>tomcat</code> user or the account specified by the
+<code>user</code> option in <code>/etc/osg/config.d/30-gip.ini</code>, thus your service
+certificates need to be owned by the appropriate user.</p>
+<ol>
+<li>\&lt;p>Enable osg-info-services in
+<code>/etc/osg/config.d/30-infoservices.ini</code>:\&lt;/p>\ \&lt;pre
+class=&quot;file&quot;>enabled = <em>True</em>\&lt;/pre></li>
+<li>\&lt;p>Generate a <code>user-vo-map</code> file with your authorization set
+up:\&lt;/p>
+i.  \&lt;p>If you're using edg-mkgridmap, run the following:\&lt;/p>\
+\&lt;pre class=&quot;rootscreen&quot;>&lt;span
+class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span>
+edg-mkgridmap\&lt;/pre>
+ii. \&lt;p>If you're using GUMS, run the following:\&lt;/p>\ \&lt;pre
+class=&quot;rootscreen&quot;>&lt;span
+class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span>
+gums-host-cron\&lt;/pre></li>
+</ol>
+<h3 id="applying-configuration-settings">Applying configuration settings</h3>
+<p>Making changes to the OSG configuration files in the <code>/etc/osg/config.d</code>
 directory does not apply those settings to software automatically.
 Settings that are made outside of the OSG directory take effect
 immediately or at least when the relevant service is restarted. For the
-OSG settings, use the [osg-configure](IniConfigurationOptions) tool to
+OSG settings, use the <a href="IniConfigurationOptions">osg-configure</a> tool to
 validate (to a limited extent) and apply the settings to the relevant
-software components. The `osg-configure` software is included
-automatically in an HTCondor CE installation.
-
-1.  \&lt;p\&gt;Make all changes to `.ini` files in the `/etc/osg/config.d`
-    directory\&lt;/p\&gt;\\ \&lt;p\&gt;**Note:** This document describes the
-    critical settings for HTCondor CE and related software. You may need
-    to configure other software that is installed on your HTCondor CE
-    host, too.\&lt;/p\&gt;
-2.  \&lt;p\&gt;Validate the configuration settings\&lt;/p\&gt;\\ \&lt;pre
-    class="rootscreen"\&gt;&lt;span
-    class="twiki-macro UCL_PROMPT_ROOT"&gt;&lt;/span&gt;
-    osg-configure -v\&lt;/pre\&gt;\\ \&lt;p\&gt;Fix any errors (at least) that
-    `osg-configure` reports.\&lt;/p\&gt;
-3.  \&lt;p\&gt;Once the validation command succeeds without errors, apply the
-    configuration settings:\&lt;/p\&gt;\\ \&lt;pre class="rootscreen"\&gt;&lt;span
-    class="twiki-macro UCL_PROMPT_ROOT"&gt;&lt;/span&gt; osg-configure -c\&lt;/pre\&gt;
-
-\#OptionalConfig
-
-### Optional configuration
-
-The following configuration steps are optional and will likely not be
+software components. The <code>osg-configure</code> software is included
+automatically in an HTCondor CE installation.</p>
+<ol>
+<li>\&lt;p>Make all changes to <code>.ini</code> files in the <code>/etc/osg/config.d</code>
+directory\&lt;/p>\ \&lt;p><strong>Note:</strong> This document describes the
+critical settings for HTCondor CE and related software. You may need
+to configure other software that is installed on your HTCondor CE
+host, too.\&lt;/p></li>
+<li>\&lt;p>Validate the configuration settings\&lt;/p>\ \&lt;pre
+class=&quot;rootscreen&quot;>&lt;span
+class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span>
+osg-configure -v\&lt;/pre>\ \&lt;p>Fix any errors (at least) that
+<code>osg-configure</code> reports.\&lt;/p></li>
+<li>\&lt;p>Once the validation command succeeds without errors, apply the
+configuration settings:\&lt;/p>\ \&lt;pre class=&quot;rootscreen&quot;>&lt;span
+class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span> osg-configure -c\&lt;/pre></li>
+</ol>
+<p>#OptionalConfig</p>
+<h3 id="optional-configuration">Optional configuration</h3>
+<p>The following configuration steps are optional and will likely not be
 required for setting up a small site. If you do not need any of the
-following special configurations, skip to [the section on using
-HTCondor CE](#UsingHTCondorCE).
-
--   [Transforming and filtering jobs](#JobRoutes)
--   [Configuring for multiple network interfaces](#NetworkInterfaces)
--   [Limiting or disabling locally running jobs on the CE](#LocalUni)
--   [HTCondor accounting groups](#AccountingGroups)
--   [Installing the HTCondor-CE View](#CeView)
-
-\#JobRoutes
-
-#### Transforming and filtering jobs
-
-If you need to modify or filter jobs, more information can be found in
-the [Job Router Recipes](Documentation/Release3.JobRouterRecipes)
-document.
-
-&lt;span class="twiki-macro NOTE"&gt;&lt;/span&gt; If you need to assign jobs to
-HTCondor accounting groups, refer to [this](#AccountingGroups) section.
-
-\#NetworkInterfaces
-
-#### Configuring for multiple network interfaces
-
-If you have multiple network interfaces with different hostnames, the
+following special configurations, skip to <a href="#UsingHTCondorCE">the section on using
+HTCondor CE</a>.</p>
+<ul>
+<li><a href="#JobRoutes">Transforming and filtering jobs</a></li>
+<li><a href="#NetworkInterfaces">Configuring for multiple network interfaces</a></li>
+<li><a href="#LocalUni">Limiting or disabling locally running jobs on the CE</a></li>
+<li><a href="#AccountingGroups">HTCondor accounting groups</a></li>
+<li><a href="#CeView">Installing the HTCondor-CE View</a></li>
+</ul>
+<h2 id="jobroutes">JobRoutes</h2>
+<h4 id="transforming-and-filtering-jobs">Transforming and filtering jobs</h4>
+<p>If you need to modify or filter jobs, more information can be found in
+the <a href="Documentation/Release3.JobRouterRecipes">Job Router Recipes</a>
+document.</p>
+<p><span class="twiki-macro NOTE"></span> If you need to assign jobs to
+HTCondor accounting groups, refer to <a href="#AccountingGroups">this</a> section.</p>
+<p>#NetworkInterfaces</p>
+<h4 id="configuring-for-multiple-network-interfaces">Configuring for multiple network interfaces</h4>
+<p>If you have multiple network interfaces with different hostnames, the
 HTCondor CE daemons need to know which hostname to use when
 communicating to each other. Generally, you will want to set
-`NETWORK_HOSTNAME` to the hostname of your public interface in
-`/etc/condor-ce/config.d/99-local.conf` directory with the line:
+<code>NETWORK_HOSTNAME</code> to the hostname of your public interface in
+<code>/etc/condor-ce/config.d/99-local.conf</code> directory with the line:</p>
+<p>``` {.file}
+NETWORK_HOSTNAME=<span style="background-color: #FFCCFF;">condorce.example.com</span></p>
+<pre><code>
+Replacing \&lt;span style="background-color:
+\#FFCCFF;"\&gt;condorce.example.com\&lt;/span\&gt; text with your public
+interface’s hostname.
 
-``` {.file}
-NETWORK_HOSTNAME=&lt;span style="background-color: #FFCCFF;"&gt;condorce.example.com&lt;/span&gt;</code></pre>
-<p>Replacing \&lt;span style=&quot;background-color:
-#FFCCFF;&quot;>condorce.example.com\&lt;/span> text with your public
-interface’s hostname.</p>
-<p>#LocalUni</p>
-<h4 id="limiting-or-disabling-locally-jobs-running-on-the-ce">Limiting or disabling locally jobs running on the CE</h4>
-<p>If you want to limit or disable jobs running locally on your CE, you
+\#LocalUni
+
+#### Limiting or disabling locally jobs running on the CE
+
+If you want to limit or disable jobs running locally on your CE, you
 will need to configure HTCondor-CE's local and scheduler universes.
 Local and scheduler universes are HTCondor CE’s analogue to GRAM’s
 managed fork: they allow jobs to be run on the CE itself. The two
 universes are effectively the same (scheduler universe launches a
-starter process for each job), so we will be configuring them in unison.</p>
-<ul>
-<li><strong>To change the default limit</strong> on the number of locally run jobs
-(the current default is 20), add the following to
-<code>/etc/condor-ce/config.d/99-local.conf</code>: \&lt;pre
-class='file'>START_LOCAL_UNIVERSE = \&lt;span
-style=&quot;background-color: #FFCCFF;&quot;>TotalLocalJobsRunning +
-TotalSchedulerJobsRunning \&lt; \&lt;job limit>\&lt;/span></li>
-</ul>
-<p>START_SCHEDULER_UNIVERSE = \$(START_LOCAL_UNIVERSE)\&lt;/pre></p>
-<ul>
-<li><strong>To only allow a specific user</strong> to start locally run jobs, add the
-following to <code>/etc/condor-ce/config.d/99-local.conf</code>: \&lt;pre
-class='file'>START_LOCAL_UNIVERSE = \&lt;span
-style=&quot;background-color: #FFCCFF;&quot;>target.Owner <code>?</code>
-&quot;\&lt;username>&quot;\&lt;/span></li>
-</ul>
-<p>START_SCHEDULER_UNIVERSE = \$(START_LOCAL_UNIVERSE)\&lt;/pre></p>
-<ul>
-<li><strong>To disable</strong> locally run jobs, add the following to
-<code>/etc/condor-ce/config.d/99-local.conf</code>: \&lt;pre
-class='file'>START_LOCAL_UNIVERSE = \&lt;span
-style=&quot;background-color: #FFCCFF;&quot;>False\&lt;/span></li>
-</ul>
-<p>START_SCHEDULER_UNIVERSE = \$(START_LOCAL_UNIVERSE)\&lt;/pre></p>
-<p><span class="twiki-macro NOTE"></span> RSV requires the ability to start
+starter process for each job), so we will be configuring them in unison.
+
+-   **To change the default limit** on the number of locally run jobs
+    (the current default is 20), add the following to
+    `/etc/condor-ce/config.d/99-local.conf`: \&lt;pre
+    class='file'\&gt;START\_LOCAL\_UNIVERSE = \&lt;span
+    style="background-color: \#FFCCFF;"\&gt;TotalLocalJobsRunning +
+    TotalSchedulerJobsRunning \&lt; \&lt;job limit\&gt;\&lt;/span\&gt;
+
+START\_SCHEDULER\_UNIVERSE = \$(START\_LOCAL\_UNIVERSE)\&lt;/pre\&gt;
+
+-   **To only allow a specific user** to start locally run jobs, add the
+    following to `/etc/condor-ce/config.d/99-local.conf`: \&lt;pre
+    class='file'\&gt;START\_LOCAL\_UNIVERSE = \&lt;span
+    style="background-color: \#FFCCFF;"\&gt;target.Owner `?`
+    "\&lt;username\&gt;"\&lt;/span\&gt;
+
+START\_SCHEDULER\_UNIVERSE = \$(START\_LOCAL\_UNIVERSE)\&lt;/pre\&gt;
+
+-   **To disable** locally run jobs, add the following to
+    `/etc/condor-ce/config.d/99-local.conf`: \&lt;pre
+    class='file'\&gt;START\_LOCAL\_UNIVERSE = \&lt;span
+    style="background-color: \#FFCCFF;"\&gt;False\&lt;/span\&gt;
+
+START\_SCHEDULER\_UNIVERSE = \$(START\_LOCAL\_UNIVERSE)\&lt;/pre\&gt;
+
+&lt;span class="twiki-macro NOTE"&gt;&lt;/span&gt; RSV requires the ability to start
 local universe jobs so if you are using RSV, you need to allow local
-universe jobs from the <code>rsv</code> user.</p>
-<p>#AccountingGroups</p>
-<h4 id="htcondor-accounting-groups">HTCondor accounting groups</h4>
-<p><span class="twiki-macro NOTE"></span> For HTCondor batch systems only</p>
-<p>If you want to provide fairshare on a group basis, as opposed to a Unix
+universe jobs from the `rsv` user.
+
+\#AccountingGroups
+
+#### HTCondor accounting groups
+
+&lt;span class="twiki-macro NOTE"&gt;&lt;/span&gt; For HTCondor batch systems only
+
+If you want to provide fairshare on a group basis, as opposed to a Unix
 user basis, you can use HTCondor accounting groups. They are independent
-of the Unix groups the user may already be in, and are <a href="http://research.cs.wisc.edu/condor/manual/v8.2/3_4User_Priorities.html#SECTION00447000000000000000">documented in
+of the Unix groups the user may already be in, and are [documented in
 the HTCondor
-manual</a>.
+manual](http://research.cs.wisc.edu/condor/manual/v8.2/3_4User_Priorities.html#SECTION00447000000000000000).
 If you are using HTCondor accounting groups, you can map jobs from the
 CE into HTCondor accounting groups based on their numeric user id, their
-DN, or their VOMS attributes.</p>
-<h5 id="mapping-by-uid">Mapping by UID</h5>
-<p>To map UID’s to an accounting group, use <code>/etc/osg/uid_table.txt</code>. It is
-consulted first and contains lines of the form:</p>
-<p>``` {.file}
-uid GroupName</p>
+DN, or their VOMS attributes.
+
+##### Mapping by UID
+
+To map UID’s to an accounting group, use `/etc/osg/uid_table.txt`. It is
+consulted first and contains lines of the form:
+</code></pre>
+<p>uid GroupName</p>
 <pre><code>
 &lt;span
 class="twiki-macro TWISTY"&gt;%TWISTY\_OPTS\_OUTPUT% showlink="Click to expand example uid\_table.txt…"&lt;/span&gt;
+</code></pre>
+<p>uscms02 TestGroup
+osg     other.osgedu</p>
+<pre><code>
+&lt;span class="twiki-macro ENDTWISTY"&gt;&lt;/span&gt;
 
-``` {.file}
-uscms02 TestGroup
-osg     other.osgedu</code></pre>
-<p><span class="twiki-macro ENDTWISTY"></span></p>
-<h5 id="mapping-by-dn-or-voms-attribute">Mapping by DN or VOMS attribute</h5>
-<p>To map DN’s or VOMS attributes to an accounting group, use
-<code>/etc/osg/extattr_table.txt</code>. This file is only consulted if the user is
-not found in the UID file and it contains lines of the form:</p>
-<p>``` {.file}
-<span style="background-color: #FFCCFF;">SubjectOrAttribute</span> GroupName</p>
+##### Mapping by DN or VOMS attribute
+
+To map DN’s or VOMS attributes to an accounting group, use
+`/etc/osg/extattr_table.txt`. This file is only consulted if the user is
+not found in the UID file and it contains lines of the form:
+</code></pre>
+<p><span style="background-color: #FFCCFF;">SubjectOrAttribute</span> GroupName</p>
 <pre><code>
 The \&lt;span style="background-color:
 \#FFCCFF;"\&gt;SubjectOrAttribute\&lt;/span\&gt; can be a Perl regular
@@ -495,7 +476,6 @@ restart\&lt;/pre></li>
 </ol>
 <p>By default, the website is served from port 80. This may be configured
 in <code>/etc/condor-ce/config.d/05-ce-view.conf</code> as well.</p>
-<p>#UsingHTCondorCE</p>
 <h2 id="using-htcondor-ce">Using HTCondor-CE</h2>
 <p>As a site administrator, there are a few ways in which you might use the
 HTCondor CE:</p>
@@ -583,41 +563,29 @@ previous directories.</p>
 <code>/etc/condor-ce/config.d/</code>         Files in this directory are parsed in alphanumeric order (i.e., <code>99-local.conf</code> will override values in <code>01-ce-auth.conf</code>)</p>
 <p>For a detailed order of the way configuration files are parsed, run the
 following command:</p>
-<p>``` {.screen}
-%UCL_PROMPT% condor_ce_config_val -config</p>
-<pre><code>
-
-### Users
-
-&lt;span class="twiki-macro STARTSECTION"&gt;Users&lt;/span&gt; The following users
-are needed by HTCondor-CE at all sites:
-
-| **User** | **Comment** | | `condor` | The HTCondor-CE will be run as
-root, but perform most of its operations as the `condor` user. | |
-`gratia` | Runs the Gratia probes to collect accounting data | |
-`tomcat` | Default user that runs GIP | &lt;span
-class="twiki-macro ENDSECTION"&gt;Users&lt;/span&gt;
-
-### Certificates
-
-  Certificate        User that owns certificate   Path to certificate
-  ------------------ ---------------------------- ---------------------------------------------------------------------------
-  Host certificate   `root`                       `/etc/grid-security/hostcert.pem` \&lt;br\&gt; `/etc/grid-security/hostkey.pem`
-
-Find instructions to request a host certificate
-[here](Documentation/Release3.GetHostServiceCertificates).
-
-### Networking
-
-&lt;span class="twiki-macro STARTSECTION"&gt;Firewalls&lt;/span&gt; &lt;span
-class="twiki-macro INCLUDE" section="FirewallTable"
-lines="htcondorce,htcondorce_shared"&gt;Documentation/Release3/FirewallInformation&lt;/span&gt;
-
-Allow inbound and outbound network connection to all internal site
+<pre><code>%UCL_PROMPT% condor_ce_config_val -config</code></pre>
+<h3 id="users">Users</h3>
+<p><span class="twiki-macro STARTSECTION">Users</span> The following users
+are needed by HTCondor-CE at all sites:</p>
+<p>| <strong>User</strong> | <strong>Comment</strong> | | <code>condor</code> | The HTCondor-CE will be run as
+root, but perform most of its operations as the <code>condor</code> user. | |
+<code>gratia</code> | Runs the Gratia probes to collect accounting data | |
+<code>tomcat</code> | Default user that runs GIP | &lt;span
+class=&quot;twiki-macro ENDSECTION&quot;&gt;Users</span></p>
+<h3 id="certificates">Certificates</h3>
+<p>Certificate        User that owns certificate   Path to certificate</p>
+<hr />
+<p>Host certificate   <code>root</code>                       <code>/etc/grid-security/hostcert.pem</code> \&lt;br> <code>/etc/grid-security/hostkey.pem</code></p>
+<p>Find instructions to request a host certificate
+<a href="Documentation/Release3.GetHostServiceCertificates">here</a>.</p>
+<h3 id="networking">Networking</h3>
+<p><span class="twiki-macro STARTSECTION">Firewalls</span> &lt;span
+class=&quot;twiki-macro INCLUDE&quot; section=&quot;FirewallTable&quot;
+lines=&quot;htcondorce,htcondorce_shared&quot;&gt;Documentation/Release3/FirewallInformation</span></p>
+<p>Allow inbound and outbound network connection to all internal site
 servers, such as GUMS and the batch system head-node only ephemeral
-outgoing ports are necessary.\&lt;/br\&gt;
-
-&lt;span class="twiki-macro ENDSECTION"&gt;Firewalls&lt;/span&gt;</code></pre>
+outgoing ports are necessary.\&lt;/br></p>
+<p><span class="twiki-macro ENDSECTION">Firewalls</span></p>
                 </section>
 
             </div>
