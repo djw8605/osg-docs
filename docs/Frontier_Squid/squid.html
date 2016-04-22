@@ -217,8 +217,8 @@ frontier-squid with this command: </p>
 <pre><code class="language-bash">[root@client ~]# yum install frontier-squid</code></pre>
 <p>Then enable it to start at boot time with this command: </p>
 <pre><code class="language-bash">[root@client ~]# chkconfig frontier-squid on</code></pre>
-<h1 id="configuring-frontier-squid">Configuring Frontier Squid</h1>
-<h2 id="configuring-the-frontier-squid-service">Configuring the Frontier Squid Service</h2>
+<h2 id="configuring-frontier-squid">Configuring Frontier Squid</h2>
+<h3 id="configuring-the-frontier-squid-service">Configuring the Frontier Squid Service</h3>
 <p>To configure the Frontier Squid service itself:</p>
 <ol>
 <li>Follow the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid">original Frontier Squid
@@ -236,7 +236,7 @@ monitoring</a>
 and <a href="https://twiki.cern.ch/twiki/bin/view/LCG/WLCGSquidRegistration#OIM">register the squid in
 OIM</a>.</li>
 </ol>
-<h2 id="configuring-the-osg-ce">Configuring the OSG CE</h2>
+<h3 id="configuring-the-osg-ce">Configuring the OSG CE</h3>
 <p>To configure the OSG Compute Element (CE) to know about your Frontier
 Squid service:</p>
 <ol>
@@ -253,12 +253,12 @@ reasons to change them</li>
 <li>Run <code>osg-configure</code> to propagate the changes on your CE
 <strong>Note:</strong> You may want to finish other CE configuration tasks before running <code>osg-configure</code>. Just be sure to run it once before starting CE services.</li>
 </ol>
-<h1 id="starting-and-stopping-the-frontier-squid-service">Starting and Stopping the Frontier Squid Service</h1>
+<h2 id="starting-and-stopping-the-frontier-squid-service">Starting and Stopping the Frontier Squid Service</h2>
 <p>Starting frontier-squid:</p>
 <pre><code>[root@client ~]# service frontier-squid start</code></pre>
 <p>Stopping frontier-squid:</p>
 <pre><code>[root@client ~]# service frontier-squid stop</code></pre>
-<h1 id="testing-frontier-squid">Testing Frontier Squid</h1>
+<h2 id="testing-frontier-squid">Testing Frontier Squid</h2>
 <p>As any user on another computer, do the following (where
 %RED%yoursquid.your.domain<span class="twiki-macro ENDCOLOR"></span> is
 the fully qualified domain name of your squid server):</p>
@@ -274,7 +274,7 @@ is probably wrong with the squid cache writes.</p>
 good to do the test in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Testing_the_installation">upstream documentation Testing the
 installation
 section</a>.</p>
-<h2 id="frontier-squid-log-files">Frontier Squid Log Files</h2>
+<h3 id="frontier-squid-log-files">Frontier Squid Log Files</h3>
 <p>Log file contents are explained in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Log_file_contents">upstream documentation Log file
 contents
 section</a>.</p>
