@@ -133,12 +133,12 @@ configuration is correct and you can <a href="#BatchSystem">skip</a> this step!
 However, if you are updating a host that used a Globus GRAM job gateway
 (aka the Globus gatekeeper), you must enable the HTCondor job gateway.</p>
 <ol>
-<li>\&lt;p>Decide whether to disable GRAM (the preferred option) or run
-both HTCondor and GRAM CEs\&lt;/p></li>
-<li>\&lt;p>Edit the gateway configuration file
-<code>/etc/osg/config.d/10-gateway.ini</code> to reflect your choice\&lt;/p>\
-\&lt;p>To enable HTCondor CE and disable GRAM CE:\&lt;/p>\ \&lt;pre
-class=&quot;file&quot;>gram_gateway_enabled = False</li>
+<li>Decide whether to disable GRAM (the preferred option) or run
+both HTCondor and GRAM CEs</li>
+<li>Edit the gateway configuration file
+<code>/etc/osg/config.d/10-gateway.ini</code> to reflect your choice
+To enable HTCondor CE and disable GRAM CE:
+<pre><code>gram_gateway_enabled = False</code></pre></li>
 </ol>
 <p>htcondor_gateway_enabled = True\&lt;/pre>\ \&lt;p>To enable both HTCondor
 and GRAM CEs:\&lt;/p>\ \&lt;pre class=&quot;file&quot;>gram_gateway_enabled = True
