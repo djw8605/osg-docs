@@ -84,9 +84,7 @@ yum</a> you will learn many
 tricks and tips on using yum.</p>
 <p>To use the packages in a repository without adding special options to
 the yum command the repository must be enabled.</p>
-<ul>
-<li>Install the Yum Repositories required by OSG</li>
-</ul>
+<h3 id="install-the-yum-repositories-required-by-osg">Install the Yum Repositories required by OSG</h3>
 <p>The OSG RPMs currently support {{ supportedOs }}</p>
 <p>OSG RPMs are distributed via the OSG yum repositories. Some packages
 depend on packages distributed via the
@@ -118,24 +116,24 @@ Installing the Yum priorities package enables the repository priority
 system to work.</p>
 <ol>
 <li>
-<p>\&lt;p>Choose the correct package name based on your operating
-system’s major version:\&lt;/p></p>
+<p>Choose the correct package name based on your operating
+system’s major version:</p>
 <ul>
 <li>For EL 5 systems, use <code>yum-priorities</code></li>
 <li>For EL 6 and EL 7 systems, use <code>yum-plugin-priorities</code></li>
 </ul>
 </li>
-<li>\&lt;p>Install the Yum priorities package:\&lt;/p>\ \&lt;pre
-class=“rootscreen”>&lt;span
-class=&quot;twiki-macro UCL_PROMPT_ROOT&quot;&gt;</span> yum install
-<em>PACKAGE</em>\&lt;/pre>\ \&lt;p>Replace <em><code>PACKAGE</code></em> with the package name
-from the previous step.\&lt;/p></li>
-<li>\&lt;p>Ensure that <code>/etc/yum.conf</code> has the following line in the
+<li>Install the Yum priorities package:
+<pre><code>yum install *PACKAGE*</code></pre>
+<p>Replace <em><code>PACKAGE</code></em> with the package name
+from the previous step.</p></li>
+<li>Ensure that <code>/etc/yum.conf</code> has the following line in the
 <code>[main]</code> section (particularly when using ROCKS), thereby enabling
-Yum plugins, including the priorities one:\&lt;/p>\ \&lt;pre
-class=“file”>plugins=1\&lt;/pre> <strong>NOTE</strong>: If you do not have a
+Yum plugins, including the priorities one:
+<pre><code> plugins=1</code></pre>
+<p><strong>NOTE</strong>: If you do not have a
 required key you can force the installation using
-<code>--nogpgcheck=; e.g., =yum install --nogpgcheck yum-priorities</code>.</li>
+<code>--nogpgcheck=; e.g., =yum install --nogpgcheck yum-priorities</code>.</p></li>
 </ol>
 <h3 id="install-osg-repositories">Install OSG Repositories</h3>
 <p>\&lt;ol> \&lt;li> \&lt;p>If you are upgrading from OSG 3.1 (or 3.2) to OSG 3.2
