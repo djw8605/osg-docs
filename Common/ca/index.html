@@ -451,7 +451,7 @@ It is possible to send the output to syslog instead of the default email system.
 </code></pre>
 
 <p>To stop <code>fetch-crl</code>:</p>
-<pre><code><span style="color:red"># For RHEL 5, CentOS 5, and SL5
+<pre><code><span style="color:red"># For RHEL 5, CentOS 5, and SL5 </span>
 [root@client ~]$ /sbin/service fetch-crl3-boot stop
 [root@client ~]$ /sbin/service fetch-crl3-cron stop
 <span style="color:red"># For RHEL 6 or 7, CentOS 6 or 7, and SL6 or SL7 </span>
@@ -476,17 +476,13 @@ It is possible to send the output to syslog instead of the default email system.
 <li>If you installed CAs using rpm packages (<code>osg-ca-certs</code>,<code>igtf-ca-certs</code>) (Options 1, 4), you will need to install the software described in <a href="ca_updater.md">the CA update document</a>, and enable <code>osg-ca-certs-updater</code> service to keep the CAs automatically updated. If you do not install the updater, you will have to regularly run yum update to keep the CAs updated.</li>
 <li>If you use Option 2 (i.e. <code>osg-update-certs</code>) then make sure that you have the corresponding service enabled.</li>
 </ol>
-<pre><code>[root@client ~]$ /sbin/service osg-update-certs-cron  status
-Periodic osg-update-certs is enabled.
-</code></pre>
-
+<p><code>[root@client ~]$ /sbin/service osg-update-certs-cron  status
+   Periodic osg-update-certs is enabled.</code></p>
 <ol>
 <li>Ensure that fetch-crl cron is enabled\</li>
 </ol>
-<pre><code>[root@client ~]$ /sbin/service fetch-crl-cron  status
-Periodic fetch-crl is enabled.
-</code></pre>
-
+<p><code>[root@client ~]$ /sbin/service fetch-crl-cron  status
+  Periodic fetch-crl is enabled.</code></p>
 <h1 id="troubleshooting">Troubleshooting</h1>
 <h2 id="useful-configuration-and-log-files">Useful configuration and log files</h2>
 <p>Configuration files:</p>
@@ -552,7 +548,6 @@ Periodic fetch-crl is enabled.
 <th align="left">Package</th>
 <th align="left">File Description</th>
 <th align="left">Location</th>
-<th align="left">Comment</th>
 </tr>
 </thead>
 <tbody>
@@ -560,30 +555,25 @@ Periodic fetch-crl is enabled.
 <td align="left">osg-ca-scripts</td>
 <td align="left">Log file of osg-update-certs</td>
 <td align="left"><code>/var/log/osg-update-certs.log</code></td>
-<td align="left"></td>
 </tr>
 <tr>
 <td align="left">osg-ca-scripts</td>
 <td align="left">Stdout of osg-update-certs</td>
 <td align="left"><code>/var/log/osg-ca-certs-status.system.out</code></td>
-<td align="left"></td>
 </tr>
 <tr>
 <td align="left">osg-ca-scripts</td>
 <td align="left">Stdout of osg-ca-manage</td>
 <td align="left"><code>/var/log/osg-ca-manage.system.out</code></td>
-<td align="left"></td>
 </tr>
 <tr>
 <td align="left">osg-ca-scripts</td>
 <td align="left">Stdout of initial CA setup</td>
 <td align="left"><code>/var/log/osg-setup-ca-certificates.system.out</code></td>
-<td align="left"></td>
 </tr>
 </tbody>
 </table>
 <h2 id="tests">Tests</h2>
-<h3 id="test-the-host-certificates">Test the host certificates</h3>
 <p>To test the host certificate of a server <code>openssl s_client</code> can be used. Here is an example with the gatekeeper:</p>
 <pre><code><span style="color:red">UCL_PROMPT</span> openssl s_client -showcerts -cert /etc/grid-security/hostcert.pem -key /etc/grid-security/hostkey.pem -CApath /etc/grid-security/certificates/ -debug -connect osg-gk.mwt2.org:2119
 </code></pre>
