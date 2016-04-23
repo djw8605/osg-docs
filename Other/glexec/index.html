@@ -129,6 +129,8 @@
                 
                     <li><a class="toctree-l4" href="#testing-the-installation-of-glexec">Testing the Installation of glexec</a></li>
                 
+                    <li><a class="toctree-l4" href="#glexec-log-files">Glexec log files</a></li>
+                
                     <li><a class="toctree-l4" href="#how-to-get-help">How to get Help?</a></li>
                 
             
@@ -301,80 +303,56 @@ uid=13160(fnalgrid) gid=9767(fnalgrid) groups=65000(glexec00)
 </code></pre>
 
 <p>If your <code>lcmaps.db</code> is set up to not use a host certificate as described in GlexecPilotCert, you should also set</p>
-<p>``
-export X509_USER_PROXY=/tmp/x509up_uNNN</p>
-<pre><code>
-(substitute `NNN` for your UID) before running glexec.
-
-If `glexec` is successful, it will print out the uid and gid that your proxy would normally be mapped to by your GUMS server, plus a supplementary tracking group. (The actual names and numbers will be different from what you see above.)
-
-If you have problems, please read about [troubleshooting glexec](TroubleshootingGlexecLcmaps).
-
-Glexec log files
-----------------
-
-`Glexec` sends all its log information by default to syslog. Where it goes from there depends on your syslog configuration, but by default they go to `/var/log/messages`. Here are some sample messages:
-
+<pre><code>export X509_USER_PROXY=/tmp/x509up_uNNN
 </code></pre>
 
-<p>Apr 25 16:36:16 fermicloud053 glexec[2867]: lcmaps: lcmaps.mod-PluginInit(): plugin glexectracking not found (arguments: )
+<p>(substitute <code>NNN</code> for your UID) before running glexec.</p>
+<p>If <code>glexec</code> is successful, it will print out the uid and gid that your proxy would normally be mapped to by your GUMS server, plus a supplementary tracking group. (The actual names and numbers will be different from what you see above.)</p>
+<p>If you have problems, please read about <a href="../TroubleshootingGlexecLcmaps">troubleshooting glexec</a>.</p>
+<h2 id="glexec-log-files">Glexec log files</h2>
+<p><code>Glexec</code> sends all its log information by default to syslog. Where it goes from there depends on your syslog configuration, but by default they go to <code>/var/log/messages</code>. Here are some sample messages:</p>
+<pre><code>Apr 25 16:36:16 fermicloud053 glexec[2867]: lcmaps: lcmaps.mod-PluginInit(): plugin glexectracking not found (arguments: )
 Apr 25 16:36:16 fermicloud053 glexec[2867]: lcmaps: lcmaps.mod-lcmaps_startPluginManager(): error initializing plugin: glexectracking
 Apr 25 16:36:16 fermicloud053 glexec[2867]: lcmaps: lcmaps_init() error: could not start plugin manager
-Apr 25 16:36:16 fermicloud053 glexec[2867]: Initialisation of LCMAPS failed.</p>
-<pre><code>
-These particular messages are pretty common, caused by forgetting to uncomment the beginning of the glexectracking rule in `/etc/lcmaps.db`.
-
-It is possible to redirect glexec log messages to a different file with standard syslog. To do that, choose one of the `LOG_LOCAL[0-7]` log facilities that are unused, for example `LOG_LOCAL1`. Then set the following in `/etc/glexec.conf`:
-
+Apr 25 16:36:16 fermicloud053 glexec[2867]: Initialisation of LCMAPS failed.
 </code></pre>
 
-<p>syslog_facility = LOG_LOCAL1</p>
-<pre><code>
-and add a corresponding parameter to the `lcmaps_glexec_tracking.mod` entry in `/etc/lcmaps.db`:
-
+<p>These particular messages are pretty common, caused by forgetting to uncomment the beginning of the glexectracking rule in <code>/etc/lcmaps.db</code>.</p>
+<p>It is possible to redirect glexec log messages to a different file with standard syslog. To do that, choose one of the <code>LOG_LOCAL[0-7]</code> log facilities that are unused, for example <code>LOG_LOCAL1</code>. Then set the following in <code>/etc/glexec.conf</code>:</p>
+<pre><code>syslog_facility = LOG_LOCAL1
 </code></pre>
 
-<p>"-log-facility LOG_LOCAL1"</p>
-<pre><code>
-Then in `/etc/syslog.conf` on el5 or `/etc/rsyslog.conf` on el6 add a line like this
-
+<p>and add a corresponding parameter to the <code>lcmaps_glexec_tracking.mod</code> entry in <code>/etc/lcmaps.db</code>:</p>
+<pre><code>  &quot;-log-facility LOG_LOCAL1&quot;
 </code></pre>
 
-<p>local1.* /var/log/glexec.log</p>
-<pre><code>
-and also exclude those messages from `/var/log/messages` by adding `local1.none` after other wildcards on the existing `/var/log/messages` line, for example:
-
+<p>Then in <code>/etc/syslog.conf</code> on el5 or <code>/etc/rsyslog.conf</code> on el6 add a line like this</p>
+<pre><code>local1.* /var/log/glexec.log
 </code></pre>
 
-<p>*.info;local1.none;mail.none;authpriv.none;cron.none /var/log/messages</p>
-<pre><code>
-Be sure to notify the system logger to re-read the configuration file with `service syslog reload` on el5, or with `service rsyslog restart` on el6.
-
-`rsyslog`, by default, limits the rate at which messages may be logged, and if maximum debugging is enabled in glexec this limit is reached. To avoid that, you can add the following to `/etc/rsyslog.conf` after the line &quot;$ModLoad imuxsock.so&quot;:
-
+<p>and also exclude those messages from <code>/var/log/messages</code> by adding <code>local1.none</code> after other wildcards on the existing <code>/var/log/messages</code> line, for example:</p>
+<pre><code>*.info;local1.none;mail.none;authpriv.none;cron.none /var/log/messages
 </code></pre>
 
-<p>$SystemLogRateLimitInterval 0
-$SystemLogRateLimitBurst 0</p>
-<pre><code>
-and of course do `service rsyslog restart`.
-
-Alternatively, `syslog-ng` (available in the EPEL repository) can do the same job by matching all the messages that have the string &quot;glexec&quot; in the name.
-These rules in `/etc/syslog-ng/syslog-ng.conf` will separate the glexec messages into `/var/log/glexec.log`:
-
+<p>Be sure to notify the system logger to re-read the configuration file with <code>service syslog reload</code> on el5, or with <code>service rsyslog restart</code> on el6.</p>
+<p><code>rsyslog</code>, by default, limits the rate at which messages may be logged, and if maximum debugging is enabled in glexec this limit is reached. To avoid that, you can add the following to <code>/etc/rsyslog.conf</code> after the line "$ModLoad imuxsock.so":</p>
+<pre><code>$SystemLogRateLimitInterval 0
+$SystemLogRateLimitBurst 0
 </code></pre>
 
-<p>destination d_glexec { file("/var/log/glexec.log"); };
-filter f_glexec { program("^glexec"); };
-filter f_notglexec { not program("^glexec"); };
-log { source(s_sys); filter(f_glexec); destination(d_glexec); };</p>
-<pre><code>
-Then later, in the log rule writing sending to `d_mesg`, add a `filter(f_notglexec);` before the destination rule to keep glexec messages out of `/var/log/messages`:
-
+<p>and of course do <code>service rsyslog restart</code>.</p>
+<p>Alternatively, <code>syslog-ng</code> (available in the EPEL repository) can do the same job by matching all the messages that have the string "glexec" in the name.
+These rules in <code>/etc/syslog-ng/syslog-ng.conf</code> will separate the glexec messages into <code>/var/log/glexec.log</code>:</p>
+<pre><code>destination d_glexec { file(&quot;/var/log/glexec.log&quot;); };
+filter f_glexec { program(&quot;^glexec&quot;); };
+filter f_notglexec { not program(&quot;^glexec&quot;); };
+log { source(s_sys); filter(f_glexec); destination(d_glexec); };
 </code></pre>
 
-<p>log { source(s_sys); filter(f_filter1); filter(f_notglexec); destination(d_mesg); };
-```</p>
+<p>Then later, in the log rule writing sending to <code>d_mesg</code>, add a <code>filter(f_notglexec);</code> before the destination rule to keep glexec messages out of <code>/var/log/messages</code>:</p>
+<pre><code>log { source(s_sys); filter(f_filter1); filter(f_notglexec); destination(d_mesg); };
+</code></pre>
+
 <h2 id="how-to-get-help">How to get Help?</h2>
 <p>To get assistance please use <a href="../HelpProcedure">Help Procedure</a>.</p>
               
