@@ -110,8 +110,6 @@
                 
                     <li><a class="toctree-l4" href="#install-instructions">Install Instructions</a></li>
                 
-                    <li><a class="toctree-l4" href="#installing-frontier-squid">Installing Frontier Squid</a></li>
-                
                     <li><a class="toctree-l4" href="#configuring-frontier-squid">Configuring Frontier Squid</a></li>
                 
                     <li><a class="toctree-l4" href="#starting-and-stopping-the-frontier-squid-service">Starting and Stopping the Frontier Squid Service</a></li>
@@ -203,7 +201,7 @@
 <p>This document is intended for System Administrators who are installing
 <code>frontier-squid</code>, the OSG distribution of the Frontier Squid software.</p>
 <h2 id="applicable-versions">Applicable Versions</h2>
-<p>The applicable software versions for this document are OSG Version &gt;= 3.1.40 or &gt;=
+<p>The applicable software versions for this document are OSG Version &gt;=
 3.2.16. The version of frontier-squid installed should be &gt;= 2.7.STABLE9-19.1</p>
 <h2 id="about-frontier-squid">About Frontier Squid</h2>
 <p>Frontier Squid is a distribution of the well-known <a href="http://squid-cache.org">squid HTTP caching
@@ -291,92 +289,17 @@ section</a>.</p>
 </tr>
 </tbody>
 </table>
-<p><span class="twiki-macro STARTSECTION">Firewalls</span> <span
-class="twiki-macro INCLUDE" section="FirewallTable"
-lines="squid,squidmonitor">Documentation/Release3.FirewallInformation</span>
-\ <span class="twiki-macro ENDSECTION">Firewalls</span></p>
 <p>The addresses of the WLCG monitoring servers for use in firewalls are
 listed in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Enabling_monitoring">upstream documentation Enabling monitoring
 section</a>.</p>
 <h2 id="install-instructions">Install Instructions</h2>
-<h3 id="install-the-yum-repositories-required-by-osg">Install the Yum Repositories required by OSG</h3>
-<p>The OSG RPMs currently support Red Hat Enterprise Linux 5, 6, 7, and variants</p>
-<p>OSG RPMs are distributed via the OSG yum repositories. Some packages depend on packages distributed via the EPEL repositories. So both repositories must be enabled.</p>
-<h4 id="install-epel">Install EPEL</h4>
-<p>Install the EPEL repository, if not already present. Note: This enables EPEL by default. Choose the right version to match your OS version.</p>
-<pre><code class="bash"># EPEL 5 (For RHEL 5, CentOS 5, and SL 5) 
-[root@client ~]$ curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-5.noarch.rpm
-[root@client ~]$ rpm -Uvh epel-release-latest-5.noarch.rpm
-# EPEL 6 (For RHEL 6, CentOS 6, and SL 6) 
-[root@client ~]$ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-# EPEL 7 (For RHEL 7, CentOS 7, and SL 7) 
-[root@client ~]$ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+<p>Prior to installing squid, make sure the host's <code>yum</code> repositories are <a href="../../Common/yum/">configured correctly</a> for OSG.</p>
+<p>Once configured, install <code>frontier-squid</code>:</p>
+<pre><code class="bash">[root@client ~]$ yum install frontier-squid
 </code></pre>
 
-<h4 id="install-the-yum-priorities-package">Install the Yum priorities package</h4>
-<p>For packages that exist in both OSG and EPEL repositories, it is important to prefer the OSG ones or else OSG software installs may fail. Installing the Yum priorities package enables the repository priority system to work.</p>
-<ol>
-<li>Choose the correct package name based on your operating system’s major version:
- ..<em> For EL 5 systems, use yum-priorities
- ..</em> For EL 6 and EL 7 systems, use yum-plugin-priorities</li>
-<li>Install the yum priorities package:</li>
-</ol>
-<pre><code class="bash">[root@client ~]$ yum install PACKAGE
-</code></pre>
-
-<p>Replace PACKAGE with the package name from the previous step.
-3. Ensure that <code>/etc/yum.conf</code> has the following line in the <code>[main]</code> section (particularly when using ROCKS), thereby enabling Yum plugins, including the priorities one:</p>
-<pre><code>plugins=1
-</code></pre>
-
-<p><em>NOTE</em>: If you do not have a required key you can force the installation using <code>--nogpgcheck</code>; e.g., </p>
-<pre><code>yum install --nogpgcheck yum-priorities
-</code></pre>
-
-<h4 id="install-osg-repositories">Install OSG Repositories</h4>
-<ol>
-<li>If you are upgrading from OSG 3.1 (or 3.2) to OSG 3.2 (or 3.3), remove the old OSG repository definition files and clean the Yum cache:</li>
-</ol>
-<pre><code class="bash">[root@client ~]$ yum clean all
-[root@client ~]$ rpm -e osg-release
-</code></pre>
-
-<p>This step ensures that local changes to <code>*.repo</code> files will not block the installation of the new OSG repositories. After this step, <code>*.repo</code> files that have been changed will exist in <code>/etc/yum.repos.d/</code> with the <code>*.rpmsave</code> extension. After installing the new OSG repositories (the next step) you may want to apply any changes made in the <code>*.rpmsave</code> files to the new <code>*.repo</code> files.
-2. Install the OSG repositories using one of the following methods depending on your EL version:
-..1. For EL versions greater than EL5, install the files directly from <code>repo.grid.iu</code>:</p>
-<pre><code class="bash">[root@client ~]$ rpm -Uvh URL
-</code></pre>
-
-<p>where URL is one of the following:</p>
-<table>
-<thead>
-<tr>
-<th>Series</th>
-<th>EL6 URL (for RHEL 6, CentOS 6, or SL 6)</th>
-<th>EL7 URL (for RHEL 7, CentOS 7, or SL 7)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>OSG 3.2</td>
-<td>https://repo.grid.iu.edu/osg/3.2/osg-3.2-el6-release-latest.rpm</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>OSG 3.3</td>
-<td>https://repo.grid.iu.edu/osg/3.3/osg-3.3-el6-release-latest.rpm</td>
-<td>https://repo.grid.iu.edu/osg/3.3/osg-3.3-el7-release-latest.rpm</td>
-</tr>
-</tbody>
-</table>
-<h2 id="installing-frontier-squid">Installing Frontier Squid</h2>
-<p>After meeting the requirements in the previous section, install
-frontier-squid with this command: </p>
-<pre><code class="bash">[root@client ~]# yum install frontier-squid
-</code></pre>
-
-<p>Then enable it to start at boot time with this command: </p>
-<pre><code class="bash">[root@client ~]# chkconfig frontier-squid on
+<p>Then enable it to start at boot:</p>
+<pre><code class="bash">[root@client ~]$ chkconfig frontier-squid on
 </code></pre>
 
 <h2 id="configuring-frontier-squid">Configuring Frontier Squid</h2>
@@ -387,10 +310,11 @@ frontier-squid with this command: </p>
     documentation</a>,
     in <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Configuration">the Configuration
     section</a>\
-   <strong>Note:</strong> An important difference between the standard Squid
-    software and the Frontier Squid variant is that Frontier Squid
-    changes are in <code>/etc/squid/customize.sh</code> instead of
-    <code>/etc/squid/squid.conf</code>.</li>
+    !!! note
+        An important difference between the standard Squid
+        software and the Frontier Squid variant is that Frontier Squid
+        changes are in <code>/etc/squid/customize.sh</code> instead of
+        <code>/etc/squid/squid.conf</code>.</li>
 <li>Enable, start, and test the service (as described below)</li>
 <li>Enable WLCG monitoring as described in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Enabling_monitoring">upstream documentation
     on enabling
@@ -414,21 +338,22 @@ Squid service:</p>
 </li>
 <li>
 <p>Run <code>osg-configure</code> to propagate the changes on your CE
-<strong>Note:</strong> You may want to finish other CE configuration tasks before running <code>osg-configure</code>. Just be sure to run it once before starting CE services.</p>
+    !!! note
+        You may want to finish other CE configuration tasks before running <code>osg-configure</code>. Just be sure to run it once before starting CE services.</p>
 </li>
 </ol>
 <h2 id="starting-and-stopping-the-frontier-squid-service">Starting and Stopping the Frontier Squid Service</h2>
 <p>Starting frontier-squid:</p>
-<pre><code>[root@client ~]# service frontier-squid start
+<pre><code><span style="color:red">UCL_ROOT_PROMPT</span> service frontier-squid start
 </code></pre>
 
 <p>Stopping frontier-squid:</p>
-<pre><code>[root@client ~]# service frontier-squid stop
+<pre><code><span style="color:red">UCL_ROOT_PROMPT</span> service frontier-squid stop
 </code></pre>
 
 <h2 id="testing-frontier-squid">Testing Frontier Squid</h2>
 <p>As any user on another computer, do the following (where
-<span style="color:red">yoursquid.your.domain<span class="twiki-macro ENDCOLOR"></span> is
+<span style="color:red">yoursquid.your.domain</span> is
 the fully qualified domain name of your squid server):</p>
 <pre><code>[user@client ~]$ export http_proxy=http://yoursquid.your.domain:3128
 [user@client ~]$ wget -qdO/dev/null http://frontier.cern.ch 2&gt;&amp;1|grep X-Cache
@@ -438,7 +363,7 @@ X-Cache: HIT from yoursquid.your.domain
 </code></pre>
 
 <p>If the grep doesn’t print anything, try removing it from the pipeline to
-see if errors are obvious. If the second try says MISS again, something
+see if errors are obvious. If the second try says <code>MISS</code> again, something
 is probably wrong with the squid cache writes.</p>
 <p>If your squid will be supporting the Frontier application, it is also
 good to do the test in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Testing_the_installation">upstream documentation Testing the
@@ -446,11 +371,9 @@ installation
 section</a>.</p>
 <h3 id="frontier-squid-log-files">Frontier Squid Log Files</h3>
 <p>Log file contents are explained in the <a href="https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Log_file_contents">upstream documentation Log file
-contents
-section</a>.</p>
+contents section</a>.</p>
 <h2 id="getting-help">Getting Help</h2>
-<p>To get assistance please use <a href="../HelpProcedure">Help
-Procedure</a>.</p>
+<p>To get assistance please use <a href="../HelpProcedure">Help Procedure</a>.</p>
               
             </div>
           </div>
