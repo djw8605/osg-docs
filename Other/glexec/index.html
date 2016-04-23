@@ -188,15 +188,19 @@
 <p>Traditionally, users submitted their jobs directly to a remote site (or compute element gatekeeper). The user job was authenticated/authorized to run at that site based on the user’s proxy credentials and run under the local unix account assigned.</p>
 <p>In a pilot-based infrastructure, users submit their jobs to a centralized site (or queue). The pilot/glidein software at the centralized site then recognizes there is a demand for computing resources. It will then submit what is called a pilot/glidein job to a remote site. This pilot job gets authenticated/authorized to run on a worker node in that site’s cluster. It will then “pull” down user jobs from the centralized queue and execute them. Both the pilot and the user job are run under the pilot job’s proxy certificate credentials and local unix account. This represents a security problem in pilot-based systems as there is no authentication/authorization of the individual user’s proxy credentials and, thus, the user’s jobs do not run using it’s own local unix account.</p>
 <p>Glexec is a security tool that can be used to resolve this problem. It is meant to be used by VOs that run these pilot-based jobs. It has a number of authentication plugins and can be used both by European grid and by OSG.</p>
-<p>The pilot job will “pull” user jobs down from the central queue and invoke glexec which will then
-1. authenticate the user job’s proxy,
-2. perform an authorization callout (to GUMS in the case of OSG, or possibly a gridmapfile) similar to that done by the gatekeeper,
-3. and then run the user job under the local account assigned by the authorization service for that user.</p>
+<p>The pilot job will “pull” user jobs down from the central queue and invoke glexec which will then</p>
+<ol>
+<li>authenticate the user job’s proxy,</li>
+<li>perform an authorization callout (to GUMS in the case of OSG, or possibly a gridmapfile) similar to that done by the gatekeeper,</li>
+<li>and then run the user job under the local account assigned by the authorization service for that user.</li>
+</ol>
 <p>In effect, glexec functions much the same as a compute element gatekeeper, except these functions are now performed on the individual worker node. The pilot jobs authentication/authorization is done by the gatekeeper and the individual user jobs are now done by glexec on the individual worker node.</p>
 <p>Many worker node clusters use shared file systems like NFS for much of their software and user home accounts. Since glexec is an suid program, it must be installed on every single worker node individually. Most shared file systems do not handle this correctly so it cannot and must not be NFS-exported.</p>
-<p>For more information regarding pilot-based systems and glexec:
-1. <a href="http://www.uscms.org/SoftwareComputing/Grid/WMS/glideinWMS/doc.html">glideinWMS - The glidein based WMS</a>
-2. <a href="http://iopscience.iop.org/1742-6596/119/5/052029/pdf/jpconf8_119_052029.pdf">Addressing the pilot security problem with gLExec (pdf)</a></p>
+<p>For more information regarding pilot-based systems and glexec:</p>
+<ol>
+<li><a href="http://www.uscms.org/SoftwareComputing/Grid/WMS/glideinWMS/doc.html">glideinWMS - The glidein based WMS</a></li>
+<li><a href="http://iopscience.iop.org/1742-6596/119/5/052029/pdf/jpconf8_119_052029.pdf">Addressing the pilot security problem with gLExec (pdf)</a></li>
+</ol>
 <h2 id="engineering-considerations">Engineering Considerations</h2>
 <p>This section describes any prerequisite software/considerations that must be taken into account before the glexec software installation is performed. It should be reviewed completely before starting the installation process.</p>
 <p>A large number of batch slots using glexec can occasionally put an enormous strain on GUMS servers and cause overloading and client timeouts. In order to survive peak loads, the sysctl parameter ‘net.core.somaxconn’ on a GUMS server machine should be set at least as high as the maximum number of job slots that might attempt to contact the server at about the same time. (For example, Fermilab set the value to 4096 on each of two servers and tested with a continuous load from 5000 job slots). At the same time, the Apache parameter ‘ListenBacklog’ must be changed to the same value. Also note that Fermilab determined that for best performance, the Apache parameter ‘MaxClients’ on GUMS servers (at least on their dual-core Virtual Machines) should be set to a value of 32. For details on these and other parameters on the GUMS server see GumsScalability.</p>
