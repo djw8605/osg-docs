@@ -455,15 +455,22 @@ automatically in an HTCondor CE installation.</p>
 <li>
 <p>Make all changes to <code>.ini</code> files in the <code>/etc/osg/config.d</code>
     directory</p>
-<p><strong>Note:</strong> This document describes the
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This document describes the
 critical settings for HTCondor CE and related software. You may need
 to configure other software that is installed on your HTCondor CE
-host, too.
-2.  Validate the configuration settings</p>
-<p><code>osg-configure -v</code>
-Fix any errors (at least) that <code>osg-configure</code> reports.
-3.  Once the validation command succeeds without errors, apply the
-configuration settings:</p>
+host, too.</p>
+</div>
+</li>
+<li>
+<p>Validate the configuration settings</p>
+<p><code>osg-configure -v</code></p>
+<p>Fix any errors (at least) that <code>osg-configure</code> reports.</p>
+</li>
+<li>
+<p>Once the validation command succeeds without errors, apply the
+    configuration settings:</p>
 <p><code>osg-configure -c</code></p>
 </li>
 </ol>
