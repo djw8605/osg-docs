@@ -326,23 +326,26 @@ of the lines in the file are commented out using a <code>#</code> at the beginni
 </ol>
 <p>You should also enable the appropriate services so that they are automatically started when your system is powered on:</p>
 <ul>
-<li>To enable OpenSSH by default on the node: \&lt;pre class=“rootscreen”></li>
+<li>
+<p>To enable OpenSSH by default on the node:</p>
+<p><code>chkconfig gsisshd on</code></p>
+</li>
 </ul>
-<p><span class="twiki-macro UCL_PROMPT_ROOT"></span> /sbin/chkconfig gsisshd on \&lt;/pre></p>
 <h2 id="stopping-and-disabling-services">Stopping and Disabling Services</h2>
 <p>To stop the services:</p>
 <ol>
 <li>
 <p>To stop OpenSSH you can use: \&lt;pre class=“rootscreen”></p>
-<p><code>screen
-service gsisshd stop</code></p>
+<p><code>service gsisshd stop</code></p>
 </li>
 </ol>
 <p>In addition, you can disable services by running the following commands. However, you don't need to do this normally.</p>
 <ul>
-<li>Optionally, to disable OpenSSH: \&lt;pre class=“rootscreen”></li>
+<li>
+<p>Optionally, to disable OpenSSH:</p>
+<p><code>chkconfig gsisshd off</code></p>
+</li>
 </ul>
-<p><span class="twiki-macro UCL_PROMPT_ROOT"></span> /sbin/chkconfig gsisshd off \&lt;/pre></p>
 <h1 id="troubleshooting">Troubleshooting</h1>
 <p>You can get information on troubleshooting errors on the <a href="http://grid.ncsa.illinois.edu/ssh/ts_server.html">NCSA page</a>.</p>
 <p>To troubleshoot LCMAPS authorization, you can add the following to <code>/etc/sysconfig/gsisshd</code> and choose a higher debug level:</p>
