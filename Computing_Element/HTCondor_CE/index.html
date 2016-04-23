@@ -293,12 +293,10 @@ However, if you are updating a host that used a Globus GRAM job gateway
 <p>Edit the gateway configuration file
     <code>/etc/osg/config.d/10-gateway.ini</code> to reflect your choice
     To enable HTCondor CE and disable GRAM CE:</p>
-<p><code>file
-gram_gateway_enabled = False
+<p><code>gram_gateway_enabled = False
 htcondor_gateway_enabled = True</code></p>
 <p>To enable both HTCondor and GRAM CEs:</p>
-<p><code>file
-gram_gateway_enabled = True
+<p><code>gram_gateway_enabled = True
 htcondor_gateway_enabled = True</code></p>
 </li>
 </ol>
