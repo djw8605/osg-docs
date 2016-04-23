@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://djw8605.github.io/osg-docs/Common/yum/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Yum Repos - OSG Documentation</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <link href="../../css/extra.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">OSG Documentation</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Guide <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../Computing_Element/HTCondor_CE/">HTCondor-CE Install</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../Frontier_Squid/squid/">Squid Install</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Yum Repos</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../../Frontier_Squid/squid/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li class="disabled">
+                        <a rel="prev" >
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/djw8605/osg-docs/">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#yum-repositories">YUM Repositories</a></li>
+        
+            <li><a href="#about-this-document">About This Document</a></li>
+        
+            <li><a href="#repositories">Repositories</a></li>
+        
+            <li><a href="#enabling-repositories">Enabling Repositories</a></li>
+        
+    
+        <li class="main "><a href="#priorities">Priorities</a></li>
+        
+    
+        <li class="main "><a href="#references">References</a></li>
+        
+    
+        <li class="main "><a href="#epel-5-for-rhel-5-centos-5-and-sl-5">EPEL 5 (For RHEL 5, CentOS 5, and SL 5)</a></li>
+        
+    
+        <li class="main "><a href="#epel-6-for-rhel-6-centos-6-and-sl-6">EPEL 6 (For RHEL 6, CentOS 6, and SL 6)</a></li>
+        
+    
+        <li class="main "><a href="#epel-7-for-rhel-7-centos-7-and-sl-7">EPEL 7 (For RHEL 7, CentOS 7, and SL 7)</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="yum-repositories">YUM Repositories</h1>
+<h2 id="about-this-document">About This Document</h2>
+<p>This document introduces YUM repositories and how OSG uses them.</p>
+<h2 id="repositories">Repositories</h2>
+<p>OSG hosts four public-facing repositories at
+<a href="http://repo.grid.iu.edu/">repo.grid.iu.edu</a>:</p>
+<ul>
+<li><strong>release</strong>: This repository contains software that we are willing
+    to support and can be used by the general community.</li>
+<li><strong>contrib</strong>: RPMs contributed from outside the OSG.</li>
+<li><strong>testing</strong>: This repository contains software ready for testing. If
+    you install packages from here, they may be buggy, but we will
+    provide limited assistance in providing a migration path to a fixed
+    version.</li>
+<li><strong>development</strong>: This repository is the bleeding edge. Installing
+    from this repository may cause the host to stop functioning, and we
+    will not assist in undoing any damage.</li>
+</ul>
+<p>OSG’s RPM packages rely also on external packages provided by supported
+OSes and EPEL. You must have the following repositories available and
+enabled:</p>
+<ul>
+<li>your OS repositories (SL 5/6/7, CentOS 5/6/7, or RHEL 5/6/7
+    repositories)</li>
+<li>EPEL repositories</li>
+<li>the OSG repositories you’d like to use</li>
+</ul>
+<p>If one of these repositories is missing you may have missing
+dependencies.</p>
+<p><span class="twiki-macro WARNING"></span> We did not test other
+repositories. If you use packages from other repositories, like
+<code>jpackage</code>, <code>dag</code>, or <code>rpmforge</code>, you may encounter problems.</p>
+<h2 id="enabling-repositories">Enabling Repositories</h2>
+<p>In <a href="../Documentation/Release3.InstallBestPractices">our advice on using
+yum</a> you will learn many
+tricks and tips on using yum.</p>
+<p>To use the packages in a repository without adding special options to
+the yum command the repository must be enabled.</p>
+<h3 id="install-the-yum-repositories-required-by-osg">Install the Yum Repositories required by OSG</h3>
+<p>The OSG RPMs currently support {{ supportedOs }}</p>
+<p>OSG RPMs are distributed via the OSG yum repositories. Some packages
+depend on packages distributed via the
+<a href="http://fedoraproject.org/wiki/EPEL">EPEL</a> repositories. So both
+repositories must be enabled.</p>
+<h3 id="install-epel">Install EPEL</h3>
+<ul>
+<li>
+<p>Install the EPEL repository, if not already present. <strong>Note:</strong> This
+    enables EPEL by default. Choose the right version to match your OS
+    version.</p>
+<p>```</p>
+<h1 id="epel-5-for-rhel-5-centos-5-and-sl-5">EPEL 5 (For RHEL 5, CentOS 5, and SL 5)</h1>
+<p>$ curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-5.noarch.rpm
+$ rpm -Uvh epel-release-latest-5.noarch.rpm</p>
+<h1 id="epel-6-for-rhel-6-centos-6-and-sl-6">EPEL 6 (For RHEL 6, CentOS 6, and SL 6)</h1>
+<p>$ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm</p>
+<h1 id="epel-7-for-rhel-7-centos-7-and-sl-7">EPEL 7 (For RHEL 7, CentOS 7, and SL 7)</h1>
+<p>$ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+```</p>
+<p><strong>WARNING</strong>: if you have your own mirror or configuration of the EPEL
+repository, you <strong>MUST</strong> verify that the OSG repository has a better yum
+priority than EPEL (<a href="../Common/InstallBestPractices#YumPriorities">details</a>).
+Otherwise, you will have strange dependency resolution (<em>depsolving</em>) issues.</p>
+</li>
+</ul>
+<h3 id="install-the-yum-priorities-package">Install the Yum priorities package</h3>
+<p>For packages that exist in both OSG and EPEL repositories, it is
+important to prefer the OSG ones or else OSG software installs may fail.
+Installing the Yum priorities package enables the repository priority
+system to work.</p>
+<ol>
+<li>
+<p>Choose the correct package name based on your operating
+    system’s major version:</p>
+<ul>
+<li>For EL 5 systems, use <code>yum-priorities</code></li>
+<li>For EL 6 and EL 7 systems, use <code>yum-plugin-priorities</code></li>
+</ul>
+</li>
+<li>
+<p>Install the Yum priorities package:
+    <code>yum install *PACKAGE*</code>
+    Replace <em><code>PACKAGE</code></em> with the package name
+    from the previous step.</p>
+</li>
+<li>
+<p>Ensure that <code>/etc/yum.conf</code> has the following line in the
+    <code>[main]</code> section (particularly when using ROCKS), thereby enabling
+    Yum plugins, including the priorities one:</p>
+<p><code>plugins=1</code></p>
+<p><strong>NOTE</strong>: If you do not have a
+required key you can force the installation using
+<code>--nogpgcheck=; e.g., =yum install --nogpgcheck yum-priorities</code>.</p>
+</li>
+</ol>
+<h3 id="install-osg-repositories">Install OSG Repositories</h3>
+<ol>
+<li>If you are upgrading from OSG 3.1 (or 3.2) to OSG 3.2
+   (or 3.3), remove the old OSG repository definition files and clean the
+   Yum cache:</li>
+</ol>
+<p><code># yum clean all
+   # rpm -e osg-release</code></p>
+<p>This step ensures that local changes to <code>*.repo</code> files will not
+   block the installation of the new OSG repositories. After this step,
+   <code>*.repo</code> files that have been changed will exist in <code>/etc/yum.repos.d/</code>
+   with the <code>*.rpmsave</code> extension. After installing the new OSG
+   repositories (the next step) you may want to apply any changes made in
+   the <code>*.rpmsave</code> files to the new <code>*.repo</code> files.
+2. Install the OSG repositories using one of the following methods
+depending on your EL version:
+    1. For EL versions greater than EL5, install the files directly from
+<code>repo.grid.iu</code>:</p>
+<pre><code>    ```
+    rpm -Uvh URL
+    ```
+
+    Where `URL` is one of the following:
+
+    | Series      | EL6 URL (for RHEL 6, CentOS 6, or SL 6) | EL7 URL (for RHEL 7, CentOS 7, or SL 7) |
+    |----------   | ----------------------------------------| --------------------------------------- | 
+    | **OSG 3.2** | `https://repo.grid.iu.edu/osg/3.2/osg-3.2-el6-release-latest.rpm`  | N/A
+    | **OSG 3.3** | `https://repo.grid.iu.edu/osg/3.3/osg-3.3-el6-release-latest.rpm`  | `https://repo.grid.iu.edu/osg/3.3/osg-3.3-el7-release-latest.rpm` |
+
+2. For EL5, download the repo file and install it using the following:
+    ```
+    # curl -O https://repo.grid.iu.edu/osg/3.2/osg-3.2-el5-release-latest.rpm
+    # rpm -Uvh osg-3.2-el5-release-latest.rpm
+    ```
+</code></pre>
+<h1 id="priorities">Priorities</h1>
+<p><span class="twiki-macro NOTE"></span> Make sure you installed the Yum
+priorities plugin, as described above. Not doing so is a common mistake
+that causes failed installations.</p>
+<p>The only OSG repository enabled by default is the release one. If you
+want to enable another one, such as <code>osg-testing</code>, then edit its file
+(e.g. <code>/etc/yum.repos.d/osg-testing.repo</code>) and change the enabled option
+from 0 to 1:</p>
+<pre><code>[osg-testing]
+name=OSG Software for Enterprise Linux 5 - Testing - $basearch
+#baseurl=http://repo.grid.iu.edu/osg/3.2/el5/testing/$basearch
+mirrorlist=http://repo.grid.iu.edu/mirror/osg/3.2/el5/testing/$basearch
+failovermethod=priority
+priority=98
+enabled=%RED%1%ENDCOLOR%
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OSG
+</code></pre>
+
+<p>If you have your own mirror or
+configuration of the EPEL repository, you <strong>MUST</strong> verify that the OSG
+repository has a better yum priority than EPEL. Otherwise, you will have
+strange dependency resolution issues.</p>
+<h1 id="references">References</h1>
+<ul>
+<li><a href="../Common/YumRpmBasics">Basic use of Yum</a></li>
+<li><a href="../Common/InstallBestPractices">Best practices in using Yum</a></li>
+</ul></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
