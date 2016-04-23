@@ -68,9 +68,6 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#current_menu-ce">current_menu: ce</a></li>
-                
-            
                 <li class="toctree-l3"><a href="#installing-and-maintaining-htcondor-ce">Installing and Maintaining HTCondor-CE</a></li>
                 
                     <li><a class="toctree-l4" href="#about-this-guide">About This Guide</a></li>
@@ -94,9 +91,6 @@
                     <li><a class="toctree-l4" href="#getting-help">Getting Help</a></li>
                 
                     <li><a class="toctree-l4" href="#reference">Reference</a></li>
-                
-            
-                <li class="toctree-l3"><a href="#gumsclient-good-bad">gumsclient -&gt; good | bad</a></li>
                 
             
             </ul>
@@ -168,9 +162,7 @@
           <div role="main">
             <div class="section">
               
-                <hr />
-<h2 id="current_menu-ce">current_menu: ce</h2>
-<h1 id="installing-and-maintaining-htcondor-ce">Installing and Maintaining HTCondor-CE</h1>
+                <h1 id="installing-and-maintaining-htcondor-ce">Installing and Maintaining HTCondor-CE</h1>
 <h2 id="about-this-guide">About This Guide</h2>
 <p>The HTCondor-CE software is a <em>job gateway</em> for an OSG Compute Element
 (CE). As such, HTCondor-CE is the entry point for jobs coming from the
@@ -269,17 +261,21 @@ single command.</p>
 </tbody>
 </table>
 <ol>
-<li>Install the CE software: <pre class="rootscreen"> $yum install <em>PACKAGE(S)</em></pre></li>
+<li>Install the CE software:</li>
 </ol>
+<p><code>yum install *PACKAGE(S)*</code></p>
 <p>To ease the transition from GRAM
 to HTCondor-CEs, the convenience RPMs install both types of job gateway
 software. By default, the HTCondor gateway is enabled and the GRAM
 gateway is disabled, which is the correct configuration for most
 HTCondor-CE-based sites (but see the gateway configuration section below
 for more options).</p>
-<p><strong>NOTE</strong>: HTCondor CE version 1.6 or later
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>HTCondor CE version 1.6 or later
 is required to send site resource information to OSG for matching jobs
 to resources.</p>
+</div>
 <h2 id="configuring-htcondor-ce">Configuring HTCondor-CE</h2>
 <p>There are a few required configuration steps to connect HTCondor CE with
 your batch system and authorization method. For more advanced
@@ -297,10 +293,12 @@ However, if you are updating a host that used a Globus GRAM job gateway
 <p>Edit the gateway configuration file
     <code>/etc/osg/config.d/10-gateway.ini</code> to reflect your choice
     To enable HTCondor CE and disable GRAM CE:</p>
-<p><code>gram_gateway_enabled = False
-htcondor_gateway_enabled = True</code>
-To enable both HTCondor and GRAM CEs:</p>
-<p><code>gram_gateway_enabled = True
+<p><code>file
+gram_gateway_enabled = False
+htcondor_gateway_enabled = True</code></p>
+<p>To enable both HTCondor and GRAM CEs:</p>
+<p><code>file
+gram_gateway_enabled = True
 htcondor_gateway_enabled = True</code></p>
 </li>
 </ol>
@@ -376,11 +374,9 @@ GUMS. Some examples of these specific requirements are:</p>
 <p>In the <code>authorize_only</code> section, comment out the
 <code>gumsclient</code> line and uncomment the <code>gridmapfile</code> line. The result
 should be as follows:</p>
-<p>```
-authorize_only:</p>
-<h1 id="gumsclient-good-bad">gumsclient -&gt; good | bad</h1>
-<p>gridmapfile -&gt; good | bad
-```</p>
+<p><code>authorize_only:
+ # gumsclient -&gt; good | bad
+ gridmapfile -&gt; good | bad</code></p>
 </li>
 <li>
 <p>Specify the location of your grid mapfile in
@@ -403,10 +399,13 @@ file somewhere else.</p>
 gums_host = YOUR GUMS HOSTNAME</code></p>
 </li>
 </ol>
-<p><strong>NOTE</strong> Once <code>gsi-authz.conf</code> is in place,
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Once <code>gsi-authz.conf</code> is in place,
 your local HTCondor will attempt to utilize the LCMAPS callouts if
 enabled in the <code>condor_mapfile</code>. If this is not the desired behavior, set
 <code>GSI_AUTHZ_CONF=/dev/null</code> in the local HTCondor configuration.</p>
+</div>
 <h3 id="configuring-information-systems">Configuring information systems</h3>
 <p>To split jobs between the various sites of the OSG, information about
 each site’s availability is uploaded to a central collector. The job
