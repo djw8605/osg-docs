@@ -570,11 +570,15 @@ CE. To run the View,</p>
 <ol>
 <li>
 <p>Begin by installing the package htcondor-ce-view:</p>
-<p><code>yum install htcondor-ce-view</code>
-2.  Next, uncomment the <code>DAEMON_LIST</code> configuration located at
-<code>/etc/condor-ce/config.d/05-ce-view.conf</code>:</p>
-<p><code>DAEMON_LIST = $(DAEMON_LIST), CEVIEW, GANGLIAD</code>
-3.  Restart the CE service.</p>
+<p><code>yum install htcondor-ce-view</code></p>
+</li>
+<li>
+<p>Next, uncomment the <code>DAEMON_LIST</code> configuration located at
+    <code>/etc/condor-ce/config.d/05-ce-view.conf</code>:</p>
+<p><code>DAEMON_LIST = $(DAEMON_LIST), CEVIEW, GANGLIAD</code></p>
+</li>
+<li>
+<p>Restart the CE service.</p>
 <p><code>service condor-ce restart</code></p>
 </li>
 </ol>
