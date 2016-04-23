@@ -284,10 +284,12 @@ both SSH services at the same time. Regardless of your choice, you
 should probably have both services use the same host key. In order 
 to do this, symlink <code>/etc/gsissh/ssh_host_dsa_key</code> and <code>/etc/gsissh/ssh_host_rsa_key</code> 
 to <code>/etc/ssh/ssh_host_dsa_key</code> and <code>/etc/ssh/ssh_host_rsa_key</code> respectively. </p>
-<p>!!! note
-    Regardless of the authorization method used for the user, any 
-    account that will be used with GSI OpenSSH must have a shell 
-    assigned to it and not be locked (have ! in the password field of <code>/etc/shadow</code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Regardless of the authorization method used for the user, any 
+account that will be used with GSI OpenSSH must have a shell 
+assigned to it and not be locked (have ! in the password field of <code>/etc/shadow</code>).</p>
+</div>
 <h2 id="using-a-gridmap-file-for-authorization">Using a gridmap file for authorization</h2>
 <p>In order to use gsissh, you'll need to create mappings in your 
 <code>/etc/grid-security/grid-mapfile</code> for the DNs that you will 
@@ -296,8 +298,10 @@ with each line consisting of DN followed by the account the DN
 should map to. Also, you should ensure that the 
 <code>/etc/grid-security/gsi-authz.conf</code> file is empty or that all 
 of the lines in the file are commented out using a <code>#</code> at the beginning of the line.</p>
-<p>!!! note
-    The mappings will not consider VOMS extensions so the first mapping that matches will be used regardless of the VO role or VO present in the users proxy</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mappings will not consider VOMS extensions so the first mapping that matches will be used regardless of the VO role or VO present in the users proxy</p>
+</div>
 <p>An example of the <code>/etc/grid-security/grid-mapfile</code> follows:</p>
 <pre><code class="file">&quot;/DC=org/DC=doegrids/OU=People/CN=USER NAME 123456&quot; useraccount
 </code></pre>
