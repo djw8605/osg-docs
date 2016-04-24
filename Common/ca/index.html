@@ -170,6 +170,49 @@
     </ul>
 <li>
           
+            <li>
+    <ul class="subnav">
+    <li><span>In-Progress Docs</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../ca_updater/">CA Updater</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../cert_scripts/">Certificate Request Scripts</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Computing_Element/job_router/">Job Router Recipe</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Other/wn_oasis/">OASIS-based Worker Node</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Storage/gridftp/">GridFTP Server</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
         </ul>
       </div>
       &nbsp;
@@ -262,7 +305,7 @@
 </tbody>
 </table>
 <h3 id="how-do-i-keep-cas-updated">How do I keep CAs updated?</h3>
-<p>Please follow the <a href="ca_update.md">update instructions</a> to make sure that the CAs are kept updated.</p>
+<p>Please follow the <a href="../ca_updater/">update instructions</a> to make sure that the CAs are kept updated.</p>
 <h2 id="option-2-install-osg-update-certs">Option 2: Install osg-update-certs</h2>
 <p>Install this with:</p>
 <pre><code>[root@client ~]$ yum install osg-ca-scripts
@@ -473,7 +516,7 @@ It is possible to send the output to syslog instead of the default email system.
 <p>The Trusted Certificate Authority (CA) certificates, and their associated Certificate Revocation Lists (CRLs), are used for every transaction on a resource that establishes an authenticated network connection based on end user’s certificate. In order for the authentication to succeed, the user’s certificate must have been issued by one of the CAs in the Trusted CA directory, and the user’s certificate must not be listed in the CRL for that CA. CRLs can be thought of as a black list of certificates. CAs are the trust authorities, similar to DMV that issues you the driving license. (Another way of thinking CRLs is the do-not-fly lists at the airports. if your certificate shows up in CRLs, you are not allowed access.) This is handled at the certificate validation stage even before the authorization check (which will provide the mapping of an authenticated user to a local account UID/GID). So you do not need to do worry about it; the grid software will do this for you. However, you should make sure that your site has the most up-to-date list of Trusted CAs. There are multiple trust authorities in OSG (think of it as a different DMV for each state). If you do not have an up-to-date list of CAs it is possible that some of your users transactions at your site will start to fail. A current CRL list for each CA is also necessary, since without one transactions for users of that CA will fail.</p>
 <h2 id="how-to-ensure-you-are-get-up-to-date-cacrl-information">How to ensure you are get up-to-date CA/CRL information</h2>
 <ol>
-<li>If you installed CAs using rpm packages (<code>osg-ca-certs</code>,<code>igtf-ca-certs</code>) (Options 1, 4), you will need to install the software described in <a href="ca_updater.md">the CA update document</a>, and enable <code>osg-ca-certs-updater</code> service to keep the CAs automatically updated. If you do not install the updater, you will have to regularly run yum update to keep the CAs updated.</li>
+<li>If you installed CAs using rpm packages (<code>osg-ca-certs</code>,<code>igtf-ca-certs</code>) (Options 1, 4), you will need to install the software described in <a href="../ca_updater/">the CA update document</a>, and enable <code>osg-ca-certs-updater</code> service to keep the CAs automatically updated. If you do not install the updater, you will have to regularly run yum update to keep the CAs updated.</li>
 <li>If you use Option 2 (i.e. <code>osg-update-certs</code>) then make sure that you have the corresponding service enabled.</li>
 </ol>
 <p><code>[root@client ~]$ /sbin/service osg-update-certs-cron  status
